@@ -2,12 +2,15 @@ function DataLoader() {
 
     this.data = '';
 
-    this.load_all_data = function() { 
+    this.load_all_data = function(callback) { 
         var request = "/getpythondata"; 
         $.get(request, function(data) {
+            
             this.data = $.parseJSON(data);
             //console.log(this.data);
-            data_callback();
+            if(typeof callback === "function") {
+                callback(this.data);
+            }
         });
     }
 }
@@ -21,9 +24,10 @@ function EuropeMap (data) {
 
 
 var dloader = new DataLoader();
-dloader.load_all_data();
+dloader.load_all_data(data_callback);
 
-function data_callback() {
+function data_callback(data) {
     console.log('Data was loaded.');
-    var europe_map = EuropeMap(dloader.data);
+    console.log(data);
+    var europe_map = EuropeMap(data);
 }
