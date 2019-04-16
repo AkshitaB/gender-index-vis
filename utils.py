@@ -20,5 +20,19 @@ class DataReader:
 
         self.year_data = year_data
 
+    def __create_dict(self):
+        metadata = pd.read_excel(self.filepath, 'Metadata', index_col=None, na_values=['NA'])
+        '''
+        countries = self.year_data['2005'].Country[1:29].values
+        domains = ['WORK', 'MONEY', 'KNOWLEDGE', 'TIME', 'POWER', 'HEALTH']
+        subdomains = {}
+        for idx, domain in enumerate(domains):
+            if idx == len(domains) - 1:
+                pass
+            else:
+                self.yea
+        index_data = {}
+        '''
+        #for each year, for each country, for each domain, for each subdomain.
     def jsonify(self):
         return json.dumps(self.year_data, cls=JSONEncoder)
