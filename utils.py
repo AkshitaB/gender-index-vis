@@ -37,7 +37,7 @@ class DataReader:
         self.countries = list(self.year_data['2005'].Country[0:29].values) #first row is EU-28
 
     def __simplify(self):
-        cols_of_interest = ['Country']
+        cols_of_interest = ['Country', 'Gender Equality Index']
         for dom in self.domains:
             cols_of_interest += [dom]
             cols_of_interest += self.subdomains[dom]

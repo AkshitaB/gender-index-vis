@@ -3,15 +3,42 @@
 <title>Gender Equality Index</title>
 <meta charset="UTF-8">
 
-<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 
 <script type="text/javascript" src="{{ url_for('static', filename='d3.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
 
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-</style>
-<body class="w3-light-grey">
-	<h1>Test</h1>
+<body>
+    <h1 class="text-center mt-5">Gender Equality Index</h1>
+    <div class="container mt-5">
+        <div class="row vh-100">
+            <div class="col-6">
+                <svg id="vis1" class="h-75 border border-dark col-12">
+                </svg>
+            </div>
+            <div class="col-6">
+                <div id="filter-panel" class="h-75 border border-dark">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Domain
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Work</a>
+                        <a class="dropdown-item" href="#">Money</a>
+                        <a class="dropdown-item" href="#">Knowledge</a>
+                        <a class="dropdown-item" href="#">Time</a>
+                        <a class="dropdown-item" href="#">Power</a>
+                        <a class="dropdown-item" href="#">Health</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
