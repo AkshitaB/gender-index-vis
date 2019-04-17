@@ -24,19 +24,18 @@ function DataLoader() {
 function FilterData(data) {
     this.data = data;
     
-    this.read_overall_index(country, year) {
+    this.read_overall_index = function(year) {
         var the_year = this.data['index_data'][year];
-        var overall_index;
+        var overall_index = {};
         for (var i=0; i<the_year.length; i++) {
-            if (the_year[i]['Country'] == country) {
-                overall_index = the_year[i]['Gender Equality Index'];
-                break;
-            }
+            //if (the_year[i]['Country'] == country) {
+            overall_index[the_year[i]['Country']] = the_year[i]['Gender Equality Index'];
+            //    break;
+            //}
         }
         return overall_index;
     }    
 }
-
 
 var dloader = new DataLoader();
 dloader.load_all_data(data_callback);
@@ -44,7 +43,17 @@ dloader.load_all_data(data_callback);
 function data_callback(data) {
     console.log('Data was loaded.');
     console.log(data);
-    //var europe_map = EuropeMap(data);
-    console.log(data['countries'])
+    var filter_obj = new FilterData(data);
+    var overall_index = filter_obj.read_overall_index('2005');
+    console.log(overall_index);
+    var render = new MapRender("#vis1");
+    render.render_map(overall_index);
+
+    $("#domain_drop a").click(function(e){
+        e.preventDefault(); // cancel the link behaviour
+        var selText = $(this).text();
+        console.log(selText);
+        $("#caption").text(selText);
+    });
 
 }
