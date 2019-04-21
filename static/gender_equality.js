@@ -40,7 +40,46 @@ function FilterData(data) {
         overall_index['min_index'] = min_index;
         overall_index['max_index'] = max_index;
         return overall_index;
-    }    
+    }
+
+    this.read_country_index_over_years = function(country, index_column) {
+        if (index_column == 'OVERALL') {
+            index_column = 'Gender Equality Index';
+        }
+        console.log('77777')
+        console.log(this.data['index_data'])
+        /*for (var i=0; i<this.index_data; i++) {
+            console.log(this.index_data[])
+        }*/
+    }
+
+    this.read_household_leisure_career_data = function(year) {
+        console.log(this.data)
+        console.log(this.data['household_data'])
+        var household = [];
+        var rel_data = this.data['household_data'][year]
+        console.log(rel_data)
+        for (var i=0; i<rel_data.length; i++) {
+            console.log(rel_data[i])
+            var female_tuple = {};
+            var male_tuple = {};
+            female_tuple['country'] = rel_data[i]['Country']
+            female_tuple['career'] = rel_data[i]['Career Prospects Index (points, 0-100) W']
+            female_tuple['household_duties'] = rel_data[i]['People doing cooking and/or household, every day (%) W']
+            female_tuple['leisure'] = rel_data[i]['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W']
+            female_tuple['gender'] = 'female';
+
+            male_tuple['country'] = rel_data[i]['Country']
+            male_tuple['career'] = rel_data[i]['Career Prospects Index (points, 0-100) M']
+            male_tuple['household_duties'] = rel_data[i]['People doing cooking and/or household, every day (%) M']
+            male_tuple['leisure'] = rel_data[i]['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
+            male_tuple['gender'] = 'male';
+
+            household.push(female_tuple)
+            household.push(male_tuple)
+        }
+        return household;
+    }
 }
 
 var year_mapper = {"1":"2005", "2":"2010", "3":"2012", "4":"2015"};
@@ -98,6 +137,9 @@ function data_callback(data) {
         update_domain_year(domain, year, filter_obj, render_bar);
 
     });
+
+    var household = filter_obj.read_household_leisure_career_data('2015');
+    console.log(household)
 
     //console.log($("#sliderElem").getValue())
 }

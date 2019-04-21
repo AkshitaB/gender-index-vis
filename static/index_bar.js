@@ -22,9 +22,7 @@ function IndexBar(svg_elem, full_data) {
     var margin = 0.1*this.height;
     var marginX = 0.02*this.width;
 
-    console.log(this.full_data["countries"])
     var num_countries = Object.keys(this.full_data["countries"]).length;
-    console.log(num_countries)
 
     var xScale = d3.scaleBand()
                     .domain(d3.range(num_countries+1))
@@ -71,7 +69,6 @@ function IndexBar(svg_elem, full_data) {
                 return marginX + xScale(i);
            })
            .attr("y", function(d) {
-                console.log(curr_obj.height)
                 return curr_obj.height - yScale(d["value"]);
            })
            .attr("width", xScale.bandwidth())

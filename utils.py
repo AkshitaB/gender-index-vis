@@ -15,6 +15,7 @@ class DataReader:
         self.__init_years()
         self.__init_countries()
         self.__simplify()
+        self.__household_data()
 
     def __init_metadata(self):
         self.domains = ['WORK', 'MONEY', 'KNOWLEDGE', 'TIME', 'POWER', 'HEALTH']
@@ -53,11 +54,26 @@ class DataReader:
             tmp = json.loads(tmp.to_json(orient='records'))
             self.index_data[year] = tmp
 
+    def __household_data(self):
+        cols_of_interest = ['Country',
+                            'Career Prospects Index (points, 0-100) W', 'Career Prospects Index (points, 0-100) M', \
+                            'People doing cooking and/or household, every day (%) W', 'People doing cooking and/or household, every day (%) M', \
+                            'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W',\
+                            'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
+        self.household_data = {}
+        for year in self.year_data:
+            tmp = self.year_data[year][cols_of_interest].dropna()
+            tmp = json.loads(tmp.to_json(orient='records'))
+            self.household_data[year] = tmp
+
+
+
     def construct_data(self):
         self.simple_data = {}
         self.simple_data['index_data'] = self.index_data
         self.simple_data['countries'] = self.countries
         self.simple_data['domains'] = self.subdomains
+        self.simple_data['household_data'] = self.household_data
 
     def jsonify(self):
         self.construct_data()
