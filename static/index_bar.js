@@ -22,7 +22,9 @@ function IndexBar(svg_elem, full_data) {
     var margin = 0.1*this.height;
     var marginX = 0.02*this.width;
 
-    var num_countries = this.full_data["countries"].length;
+    console.log(this.full_data["countries"])
+    var num_countries = Object.keys(this.full_data["countries"]).length;
+    console.log(num_countries)
 
     var xScale = d3.scaleBand()
                     .domain(d3.range(num_countries+1))
@@ -69,17 +71,19 @@ function IndexBar(svg_elem, full_data) {
                 return marginX + xScale(i);
            })
            .attr("y", function(d) {
-                return curr_obj.height - yScale(d["value"]) - margin;
+                console.log(curr_obj.height)
+                return curr_obj.height - yScale(d["value"]);
            })
            .attr("width", xScale.bandwidth())
            .attr("height", function(d) {
-                return yScale(d["value"]);
+                return yScale(d["value"]) - margin;
            })
            .attr("data-toggle", "tooltip")
            .attr("data-html", "true")
            .attr("fill", function(d) {
+                var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d["key"] + '<br><b>GE Index:</b> ' + 
+                                          country + '<br><b>GE Index:</b> ' + 
                                           d["value"]
                                 });
                 if (d["key"] == "EU-28")
@@ -96,8 +100,9 @@ function IndexBar(svg_elem, full_data) {
                 d3.select(this)
                 .style("fill", "orange");
 
+                var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d["key"] + '<br><b>GE Index:</b> ' + 
+                                          country + '<br><b>GE Index:</b> ' + 
                                           d["value"]
                                 });
 
@@ -133,7 +138,7 @@ function IndexBar(svg_elem, full_data) {
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + marginX + ","+(margin - 100)+")")
+           .attr("transform", "translate(" + marginX + ","+(margin - 105)+")")
            .call(yAxis);
 
     }
@@ -162,17 +167,18 @@ function IndexBar(svg_elem, full_data) {
                 return marginX + xScale(i);
            })
            .attr("y", function(d) {
-                return curr_obj.height - yScale(d["value"]) - margin;
+                return curr_obj.height - yScale(d["value"]);
            })
            .attr("width", xScale.bandwidth())
            .attr("height", function(d) {
-                return yScale(d["value"]);
+                return yScale(d["value"]) - margin;
            })
            .attr("data-toggle", "tooltip")
            .attr("data-html", "true")
            .attr("fill", function(d) {
+                var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d["key"] + '<br><b>GE Index:</b> ' + 
+                                          country + '<br><b>GE Index:</b> ' + 
                                           d["value"]
                                 });
                 if (d["key"] == "EU-28") {
@@ -189,9 +195,9 @@ function IndexBar(svg_elem, full_data) {
 
                 d3.select(this)
                 .style("fill", "orange");
-
+                var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d["key"] + '<br><b>GE Index:</b> ' + 
+                                          country + '<br><b>GE Index:</b> ' + 
                                           d["value"]
                                 });
 
@@ -228,7 +234,7 @@ function IndexBar(svg_elem, full_data) {
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + marginX + ","+(margin - 100)+")")
+           .attr("transform", "translate(" + marginX + ","+(margin - 105)+")")
            .call(yAxis);
 
 

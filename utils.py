@@ -34,7 +34,12 @@ class DataReader:
         self.year_data = year_data
 
     def __init_countries(self):
-        self.countries = list(self.year_data['2005'].Country[0:29].values) #first row is EU-28
+        countries = pd.read_excel(self.filepath, 'CountryCodes', index_col=None, header=None, na_values=['NA'])
+        self.countries = {}
+        for idx, row in countries.iterrows():
+            self.countries[row[0]] = row[1]
+
+        #self.countries = list(self.year_data['2005'].Country[0:29].values) #first row is EU-28
 
     def __simplify(self):
         cols_of_interest = ['Country', 'Gender Equality Index']
