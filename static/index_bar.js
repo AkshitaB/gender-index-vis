@@ -129,7 +129,7 @@ function IndexBar(svg_elem, full_data) {
                                  .ticks(10)
                                  .tickFormat(function(d, i){
                                     return (10 - i)*10;
-                                 });                             
+                                 });
 
         svg.append("g")
            .attr("class", "axis")
@@ -225,7 +225,7 @@ function IndexBar(svg_elem, full_data) {
                                  .ticks(10)
                                  .tickFormat(function(d, i){
                                     return (10 - i)*10;
-                                 });                                   
+                                 });                      
 
         svg.append("g")
            .attr("class", "axis")
