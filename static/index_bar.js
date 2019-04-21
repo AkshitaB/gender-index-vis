@@ -82,6 +82,8 @@ function IndexBar(svg_elem, full_data) {
                                           d["key"] + '<br><b>GE Index:</b> ' + 
                                           d["value"]
                                 });
+                if (d["key"] == "EU-28")
+                    return "gray"
                 return curr_obj.domain_color_map[domain];
 
            })
@@ -101,9 +103,14 @@ function IndexBar(svg_elem, full_data) {
 
                })
             .on("mouseout", function(d, j) {
-                console.log("old mouseout")
+                if (d["key"] == "EU-28") {
+                    var fill_color = "gray"
+                }
+                else {
+                    var fill_color = curr_obj.domain_color_map[domain];
+                }
                 d3.select(this)
-                .style("fill", curr_obj.domain_color_map[domain]);
+                .style("fill", fill_color);
             })
            ;
 
@@ -138,17 +145,19 @@ function IndexBar(svg_elem, full_data) {
 
         svg.selectAll("g.axis").remove();
 
-        //svg.selectAll("rect").remove();
+        svg.selectAll("rect").remove();
 
         var count = 0;
+
+        
         
         svg.selectAll("rect")
            .data(records)
-           //.enter()
-           //.append("rect")
-           .transition()
-           .duration(500)
-           .ease(d3.easeLinear)
+           .enter()
+           .append("rect")
+           //.transition()
+           //.duration(500)
+           //.ease(d3.easeLinear)
            .attr("x", function(d, i) {
                 return marginX + xScale(i);
            })
@@ -159,12 +168,21 @@ function IndexBar(svg_elem, full_data) {
            .attr("height", function(d) {
                 return yScale(d["value"]);
            })
-           .attr("fill", function(d) {
-                return curr_obj.domain_color_map[domain];
-           })
            .attr("data-toggle", "tooltip")
            .attr("data-html", "true")
+           .attr("fill", function(d) {
+                $(this).tooltip({'title': '<b>Country:</b> ' + 
+                                          d["key"] + '<br><b>GE Index:</b> ' + 
+                                          d["value"]
+                                });
+                if (d["key"] == "EU-28") {
+                    return "gray"
+                }
+                return curr_obj.domain_color_map[domain];
+           })
+           
            ;
+
 
         svg.selectAll("rect")
            .on("mouseover", function(d, j) {
@@ -179,10 +197,17 @@ function IndexBar(svg_elem, full_data) {
 
                })
             .on("mouseout", function(d, j) {
+                if (d["key"] == "EU-28") {
+                    var fill_color = "gray"
+                }
+                else {
+                    var fill_color = curr_obj.domain_color_map[domain];
+                }
                 d3.select(this)
-                .style("fill", curr_obj.domain_color_map[domain]);
+                .style("fill", fill_color);
             })
            ;
+        
 
         var xAxis = d3.axisBottom().scale(xScale)
                                    .tickValues(d3.range(num_countries))

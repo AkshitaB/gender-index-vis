@@ -43,6 +43,8 @@ function FilterData(data) {
     }    
 }
 
+var year_mapper = {"1":"2005", "2":"2010", "3":"2012", "4":"2015"};
+
 function add_dropdown_event(filter_obj, render_bar) {
 
     $("#domain_drop a").click(function(e){
@@ -53,7 +55,7 @@ function add_dropdown_event(filter_obj, render_bar) {
         //todo: change color of button.
         var mySlider = $("#sliderElem").slider();
         var year = mySlider.slider('getValue');
-        
+        year = year_mapper[year];
         update_domain_year(selText, year, filter_obj, render_bar);
         $("#caption").text(selText);
     });
@@ -68,6 +70,7 @@ function update_domain_year(new_domain, year, filter_obj, render_bar) {
 
     render_bar.update(new_domain, overall_index);
 }
+
 
 function data_callback(data) {
     console.log('Data was loaded.');
@@ -88,7 +91,8 @@ function data_callback(data) {
 
     mySlider.on("change", function(d) {
         var year = mySlider.slider('getValue');
-        
+
+        year = year_mapper[year];
         var domain = $("#dropdown_btn").text();
 
         update_domain_year(domain, year, filter_obj, render_bar);
