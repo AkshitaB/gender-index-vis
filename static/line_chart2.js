@@ -20,6 +20,9 @@ function LineChart2(svg_elem, full_data) {
 
     var num_years = 4;
 
+    var years = ['2005', '2010', '2012', '2015']
+    //var years = [2005, 2010,];
+
     var xScale = d3.scaleLinear()
                     .domain([0, 4])
                     .rangeRound([0, this.width]);
@@ -31,21 +34,22 @@ function LineChart2(svg_elem, full_data) {
                     .domain([0, 100])
                     .range([margin, this.height]);
 
-    this.render_chart = function(country, data) {
+    this.render_chart = function(country, domain, data) {
 
         var curr_obj = this;
         var width = curr_obj.width;
         var height = curr_obj.height;
 
         console.log(data)
-
-        var col_name_mapper = {};
-        col_name_mapper['EU-28'] = {column: 'eu_output'};
-        col_name_mapper[country] = {column: 'country_output'};
           
+        var dataset_1 = [];
+        var dataset_2 = [];
+        for (var idx in data) {
+            dataset_2.push({"y":Math.round(data[idx]['eu_output'] * 100) / 100})
+            dataset_1.push({"y":Math.round(data[idx]['country_output'] * 100) / 100})
+        }
 
-        // The number of datapoints
-        var n = 4;
+        console.log(dataset_1)
 
         // 5. X scale will use the index of our data
         /*var xScale = d3.scaleLinear()
@@ -65,18 +69,21 @@ function LineChart2(svg_elem, full_data) {
 
         // 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
 
-        var dataset = [10, 20, 30, 20].map(function(d) {return {"y":d}});
-        var dataset2 = [100, 60, 20, 10].map(function(d) {return {"y":d}});
+        //var dataset = [10, 20, 30, 20].map(function(d) {return {"y":d}});
+        //var dataset2 = [100, 60, 20, 10].map(function(d) {return {"y":d}});
+
+        var dataset = dataset_1;
+        var dataset2 = dataset_2;
 
         var svg = d3.select(curr_obj.svg_elem);
 
         // 3. Call the x axis in a group tag
 
         var xAxis = d3.axisBottom().scale(xScale)
-                                   .tickValues(d3.range(num_years));
-                                   /*.tickFormat(function(d, i) {
-                                    return records[i]["key"];
-                                   });*/
+                                   .tickValues(d3.range(num_years))
+                                   .tickFormat(function(d, i) {
+                                    return years[i];
+                                   });
 
         var yAxis = d3.axisLeft().scale(yScale)
                                  .ticks(10)
@@ -92,7 +99,7 @@ function LineChart2(svg_elem, full_data) {
         // 4. Call the y axis in a group tag
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + marginX + ","+(margin - 105)+")")
+           .attr("transform", "translate(" + marginX + ","+(0 - margin)+")")
            .call(yAxis);
 
         // 9. Append the path, bind the data, and call the line generator 
@@ -100,7 +107,7 @@ function LineChart2(svg_elem, full_data) {
             .datum(dataset) // 10. Binds data to the line 
             .attr("class", "line") // Assign a class for styling 
             .attr("d", line) // 11. Calls the line generator 
-            .style("stroke", "red");
+            .style("stroke", curr_obj.domain_color_map[domain]);
 
         svg.append("path")
             .datum(dataset2) // 10. Binds data to the line 
@@ -123,7 +130,7 @@ function LineChart2(svg_elem, full_data) {
             .attr("cx", function(d, i) { return xScale(i) + marginX })
             .attr("cy", function(d) { console.log(d.y); return curr_obj.height - (yScale(d.y))})
             .attr("r", 5)
-            .style("fill", "red");
+            .style("fill", curr_obj.domain_color_map[domain]);
 
         
 
@@ -134,19 +141,19 @@ function LineChart2(svg_elem, full_data) {
             .attr("cx", function(d, i) { return xScale(i) + marginX})
             .attr("cy", function(d) { console.log(d.y); return curr_obj.height - yScale(d.y) })
             .attr("r", 5)
-            .attr("fill", "gray")
-            .attr("data-html", "true")
+            .attr("fill", "gray");
+            /*.attr("data-html", "true")
             .attr("data-toggle", function(d, i) {
-                $(this).tooltip({'title': '<b>Value:</b> ' + 
+                $(this).tooltip({'title': '<b>EU-28 Index:</b> ' + 
                                           d.y
                                 });
                 return "tooltip";
-            });
+            });*/
 
         svg.selectAll(".dot")
             .attr("data-html", "true")
             .attr("data-toggle", function(d, i) {
-                $(this).tooltip({'title': '<b>Value:</b> ' + 
+                $(this).tooltip({'title': '<b>'+country+' Index:</b> ' + 
                                           d.y
                                 });
                 return "tooltip";
@@ -169,9 +176,7 @@ function LineChart2(svg_elem, full_data) {
                 });
 
                 //var country = curr_obj.full_data['countries'][d['key']];
-                $(this).tooltip({'title': '<b>Value:</b> ' + 
-                                          d.y
-                                });
+                $(this).tooltip();
 
                 
                 var x0 = xScale.invert(d3.mouse(this)[0]);
@@ -189,11 +194,10 @@ function LineChart2(svg_elem, full_data) {
             })
             .on("mouseout", function(d, i) {
                 d3.select(this)
-                .style("fill", "red");
+                .style("fill", curr_obj.domain_color_map[domain]);
 
                 d3.selectAll(".dot2")
                 .style("fill", function(dn, j) {
-                    console.log(this)
                     if (i === j) {
                         $(this).mouseout();
                         return "gray";
@@ -208,6 +212,13 @@ function LineChart2(svg_elem, full_data) {
             });
 
         svg.selectAll(".dot2")
+            .attr("data-html", "true")
+            .attr("data-toggle", function(d, i) {
+                $(this).tooltip({'title': '<b>EU-28 Index:</b> ' + 
+                                          d.y
+                                });
+                return "tooltip";
+            })
             .on("mouseover", function(d, j) {
 
                 d3.select(this)
@@ -220,15 +231,13 @@ function LineChart2(svg_elem, full_data) {
                         return "orange";
                     }
                     else {
-                        return "red";
+                        return curr_obj.domain_color_map[domain];
                     }
                     
                 });
 
                 //var country = curr_obj.full_data['countries'][d['key']];
-                $(this).tooltip({'title': '<b>Value:</b> ' + 
-                                          d.y
-                                });
+                $(this).tooltip();
 
                 
                 var x0 = xScale.invert(d3.mouse(this)[0]);
@@ -250,13 +259,12 @@ function LineChart2(svg_elem, full_data) {
 
                 d3.selectAll(".dot")
                 .style("fill", function(dn, j) {
-                    console.log(this)
                     if (i === j) {
                         $(this).mouseout();
-                        return "red";
+                        return curr_obj.domain_color_map[domain];
                     }
                     else {
-                        return "red";
+                        return curr_obj.domain_color_map[domain];
                     }
                     
                 });

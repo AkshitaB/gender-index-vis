@@ -101,26 +101,80 @@ function add_dropdown_event(filter_obj, render_bar) {
 
     $("#domain_drop a").click(function(e){
         e.preventDefault(); // cancel the link behaviour
+
         var selText = $(this).text();
         console.log(selText);
         $("#dropdown_btn").text(selText);
-        //todo: change color of button.
-        var mySlider = $("#sliderElem").slider();
-        var year = mySlider.slider('getValue');
-        year = year_mapper[year];
-        update_domain_year(selText, year, filter_obj, render_bar);
         $("#caption").text(selText);
+        change_vis1(filter_obj);
+        change_vis2(filter_obj);
     });
 
 }
 
-function update_domain_year(new_domain, year, filter_obj, render_bar) {
+/*function update_domain_year(new_domain, year, filter_obj, render_bar) {
     console.log(year)
     console.log(new_domain)
     var overall_index = filter_obj.read_overall_index(year, new_domain.toUpperCase());
     console.log(overall_index);
 
     render_bar.update(new_domain, overall_index);
+}*/
+
+function change_vis2(filter_obj) {
+    var country_code = $("#chosen_country").text();
+    $("#vis2").empty();
+    if (country_code === "EU-28") {
+
+    }
+    else {
+        var domain = $("#dropdown_btn").text(); //TODO: This is the dropdown from first vis.
+
+        var per_country = filter_obj.read_country_index_over_years(country_code, domain.toUpperCase());
+        console.log(per_country);
+
+        var country_name = filter_obj.data['countries'][country_code];
+
+        var render_chart = new LineChart2("#vis2", filter_obj.data);
+        render_chart.render_chart(country_name, domain, per_country);
+    }
+
+}
+
+function change_vis1(filter_obj) {
+
+    var mySlider = $("#sliderElem").slider();
+    var value = mySlider.slider('getValue');
+    console.log(value)
+
+    $("#vis1").empty();
+    var year = mySlider.slider('getValue');
+
+    year = year_mapper[year];
+    var domain = $("#dropdown_btn").text();
+
+    var overall_index = filter_obj.read_overall_index(year, domain.toUpperCase());
+    console.log(overall_index);
+
+    var render_bar = new IndexBar("#vis1", filter_obj.data);
+    render_bar.render_bar(domain, overall_index);
+
+}
+
+function add_time_slider_event(filter_obj) {
+
+    var mySlider = $("#sliderElem").slider();
+
+    mySlider.on("change", function(d) {
+        change_vis1(filter_obj);
+    });
+
+}
+
+function add_country_selection_event(filter_obj) {
+    $("#chosen_country").change(function() {
+        change_vis2(filter_obj);
+    });
 }
 
 
@@ -137,33 +191,14 @@ function data_callback(data) {
 
     add_dropdown_event(filter_obj, render_bar);
 
-    var mySlider = $("#sliderElem").slider();
-    var value = mySlider.slider('getValue');
-    console.log(value)
+    add_time_slider_event(filter_obj);
 
-    mySlider.on("change", function(d) {
-        var year = mySlider.slider('getValue');
+    add_country_selection_event(filter_obj);
 
-        year = year_mapper[year];
-        var domain = $("#dropdown_btn").text();
+    
 
-        update_domain_year(domain, year, filter_obj, render_bar);
-
-    });
-
-    var household = filter_obj.read_household_leisure_career_data('2015');
-    console.log(household)
-
-    //console.log($("#sliderElem").getValue())
-
-    var per_country = filter_obj.read_country_index_over_years("SE", "OVERALL");
-    console.log(per_country);
-
-    //var render_chart = new LineChart("#chart-line1", filter_obj.data);
-    //render_chart.render_chart("Sweden", per_country);
-
-    var render_chart = new LineChart2("#vis2", filter_obj.data);
-    render_chart.render_chart("Sweden", per_country);
+    //var household = filter_obj.read_household_leisure_career_data('2015');
+    //console.log(household)
 }
 
 
