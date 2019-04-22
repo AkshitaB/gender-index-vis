@@ -43,14 +43,29 @@ function FilterData(data) {
     }
 
     this.read_country_index_over_years = function(country, index_column) {
+        var curr_obj = this;
         if (index_column == 'OVERALL') {
             index_column = 'Gender Equality Index';
         }
-        console.log('77777')
-        console.log(this.data['index_data'])
-        /*for (var i=0; i<this.index_data; i++) {
-            console.log(this.index_data[])
-        }*/
+
+        //var country_output = {};
+        //var eu_output = {};
+        var country_output;
+        var eu_output;
+        var output = [];
+        for (var year in curr_obj.data['index_data']) {
+            var this_year = curr_obj.data['index_data'][year];
+            for (var j=0; j<29; j++) {
+                if (this_year[j]['Country'] === country) {
+                    country_output = this_year[j][index_column];
+                }
+                else if(this_year[j]['Country'] === 'EU-28') {
+                    eu_output = this_year[j][index_column];
+                }
+            }
+            output.push({'year':year, 'country_output':country_output, 'eu_output':eu_output});
+        }
+        return output;
     }
 
     this.read_household_leisure_career_data = function(year) {
@@ -58,9 +73,7 @@ function FilterData(data) {
         console.log(this.data['household_data'])
         var household = [];
         var rel_data = this.data['household_data'][year]
-        console.log(rel_data)
         for (var i=0; i<rel_data.length; i++) {
-            console.log(rel_data[i])
             var female_tuple = {};
             var male_tuple = {};
             female_tuple['country'] = rel_data[i]['Country']
@@ -142,6 +155,15 @@ function data_callback(data) {
     console.log(household)
 
     //console.log($("#sliderElem").getValue())
+
+    var per_country = filter_obj.read_country_index_over_years("SE", "OVERALL");
+    console.log(per_country);
+
+    //var render_chart = new LineChart("#chart-line1", filter_obj.data);
+    //render_chart.render_chart("Sweden", per_country);
+
+    var render_chart = new LineChart2("#vis2", filter_obj.data);
+    render_chart.render_chart("Sweden", per_country);
 }
 
 
