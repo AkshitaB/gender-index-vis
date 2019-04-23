@@ -19,6 +19,8 @@ function IndexBar(svg_elem, full_data) {
     var margin = 0.1*this.height;
     var marginX = 0.02*this.width;
 
+    var within_margin = 0.01*this.height;
+
     var num_countries = Object.keys(this.full_data["countries"]).length;
 
     var xScale = d3.scaleBand()
@@ -66,7 +68,7 @@ function IndexBar(svg_elem, full_data) {
                 return marginX + xScale(i);
            })
            .attr("y", function(d) {
-                return curr_obj.height - yScale(d["value"]);
+                return curr_obj.height - yScale(d["value"]) + within_margin;
            })
            .attr("width", xScale.bandwidth())
            .attr("height", function(d) {
@@ -85,10 +87,38 @@ function IndexBar(svg_elem, full_data) {
                 return curr_obj.domain_color_map[domain];
 
            })
+           .attr("selected", "false")
            .on("click", function(d) {
-                $("#chosen_country").text(d["key"]);
-                console.log("happened")
-                $("#chosen_country").change();
+
+                //d3.select(this)
+                 //   .attr("selected", "true");
+                    $("#chosen_country").text(d["key"]);
+                    $("#chosen_country").change();
+
+                /*var is_clicked = d3.select(this).attr("selected");
+                console.log(is_clicked)
+                if (is_clicked === "false") {
+                    console.log("in")
+                    d3.select(this)
+                    .attr("selected", "true");
+                    $("#chosen_country").text(d["key"]);
+                    $("#chosen_country").change();
+
+
+
+                    //d3.select(this)
+                    //.style("fill", "orange");
+                }
+                else {
+                    d3.select(this)
+                    .attr("selected", "false")
+                    /*.style("fill", function(d) {
+                        if (d["key"] == "EU-28")
+                            return "gray"
+                        return curr_obj.domain_color_map[domain];
+                    });
+                }*/
+                
            })
            
            .on("mouseover", function(d, j) {
@@ -110,8 +140,11 @@ function IndexBar(svg_elem, full_data) {
                 else {
                     var fill_color = curr_obj.domain_color_map[domain];
                 }
-                d3.select(this)
-                .style("fill", fill_color);
+                //if (d3.select(this).attr("selected") === "false") {
+                    d3.select(this)
+                    .style("fill", fill_color);
+                //}
+                
             })
            ;
 
@@ -129,12 +162,12 @@ function IndexBar(svg_elem, full_data) {
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate("+marginX+"," + (curr_obj.height - margin) + ")")
+           .attr("transform", "translate("+marginX+"," + (curr_obj.height - margin + within_margin) + ")")
            .call(xAxis);
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + marginX + ","+(0 - margin)+")")
+           .attr("transform", "translate(" + marginX + ","+(0 - margin + within_margin)+")")
            .call(yAxis);
 
     }

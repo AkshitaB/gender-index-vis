@@ -93,6 +93,31 @@ function FilterData(data) {
         }
         return household;
     }
+
+    this.read_sub_domains = function(year, domain){
+        if(domain == 'OVERALL'){
+            return null;
+        }
+        var sub_domains = this.data['domains'][domain];
+        return sub_domains;
+    }
+
+    this.read_sub_domain_data =  function(year, domain){
+        if(domain == 'OVERALL'){
+            return null;
+        }
+        var sub_domains = this.data['domains'][domain];
+
+        sub_domain_data = []
+
+        var the_year = this.data['index_data'][year];
+        for(var i = 0; i<the_year.length; i++){
+            for(var j = 0; j<sub_domains.length; j++){
+                sub_domain_data.push({"country" : the_year[i]['Country'], "sub_domain" : sub_domains[j], "value" : the_year[i][sub_domains[j]]});
+            }
+        }
+        return sub_domain_data;
+    }
 }
 
 var year_mapper = {"1":"2005", "2":"2010", "3":"2012", "4":"2015"};
@@ -109,14 +134,35 @@ function add_dropdown_event(filter_obj) {
         $("#caption2").text(selText);
         change_vis1(filter_obj);
         change_vis2(filter_obj);
+        change_vis3(filter_obj);
     });
+
+}
+
+function change_vis3(filter_obj){
+
+    $("#vis3").empty();
+    var mySlider = $("#sliderElem").slider();
+    var year = mySlider.slider('getValue');
+    year = year_mapper[year];
+
+    var domain = $("#dropdown_btn").text();
+
+    if(domain != 'Overall'){
+        var sub_domains = filter_obj.read_sub_domains(year, domain.toUpperCase());
+        var sub_domain_data = filter_obj.read_sub_domain_data(year, domain.toUpperCase());
+
+        var render_map = new HeatMap("#vis3", filter_obj.data);
+        render_map.render_heat_map(domain, sub_domains, sub_domain_data);
+    }else{
+        render_map.remove();
+    }
+    
 
 }
 
 function change_vis2(filter_obj) {
     var country_code = $("#chosen_country").text();
-    console.log(country_code)
-    console.log("hhh")
     $("#vis2").empty();
     if (country_code === "EU-28" || country_code === "") {
 
@@ -161,6 +207,7 @@ function add_time_slider_event(filter_obj) {
 
     mySlider.on("change", function(d) {
         change_vis1(filter_obj);
+        change_vis3(filter_obj);
     });
 
 }
