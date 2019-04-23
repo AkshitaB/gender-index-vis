@@ -113,11 +113,12 @@ function IndexBar(svg_elem, full_data) {
 
                  }else{
                     //console.log("In else statement")
-                    selected = null;
-                    var fill_color = curr_obj.domain_color_map[domain];
-                    if(d.key == "EU-28") fill_color = "gray";
-                    d3.select(this).style("fill", fill_color)
+                    
+                    d3.select(this).style("fill", selected.attr("my_color"))
                       .attr("selected","false");
+                    selected = null;
+                    $("#chosen_country").text("");
+                    $("#chosen_country").change();
                  }
                     
 

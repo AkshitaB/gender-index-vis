@@ -49,7 +49,10 @@ function LineChart2(svg_elem, full_data) {
         var dataset_eu = [];
         for (var idx in data) {
             dataset_eu.push({"y":Math.round(data[idx]['eu_output'] * 100) / 100})
-            dataset_1.push({"y":Math.round(data[idx]['country_output'] * 100) / 100})
+            if(country){
+                dataset_1.push({"y":Math.round(data[idx]['country_output'] * 100) / 100});
+            }
+            
             //dataset_2.push({"y":Math.round((data[idx]['country_output'] - 10) * 100) / 100})
         }
 

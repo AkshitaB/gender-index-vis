@@ -218,7 +218,10 @@ function change_vis2(filter_obj) {
     var country_code = $("#chosen_country").text();
     $("#vis2").empty();
     if (country_code === "EU-28" || country_code === "") {
-
+        var domain = $("#dropdown_btn").text();
+        var per_country = filter_obj.read_country_index_over_years("", domain.toUpperCase());
+        var render_chart = new LineChart2("#vis2", filter_obj.data);
+        render_chart.render_chart("", domain, per_country);
     }
     else {
         var domain = $("#dropdown_btn").text(); //TODO: This is the dropdown from first vis.
@@ -295,6 +298,7 @@ function data_callback(data) {
     render_diverging_bar.render_diverging_bar(power_data);
 
     change_vis3(filter_obj);
+    change_vis2(filter_obj);
 
     add_dropdown_event(filter_obj);
 
@@ -302,10 +306,6 @@ function data_callback(data) {
 
     add_country_selection_event(filter_obj);
 
-    
-
-    //var household = filter_obj.read_household_leisure_career_data('2015');
-    //console.log(household)
 }
 
 
