@@ -13,114 +13,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.1/css/bootstrap-slider.min.css">
 
-<!--style>
-    .chart-wrapper {
-    /*max-width: 950px;
-    min-width: 304px;*/
-    margin: 0 auto;
-    /*background-color: #FAF7F7;*/
-}
-
-.chart-wrapper .inner-wrapper {
-    position: relative;
-    padding-bottom: 50%;
-    width: 100%;
-}
-
-.chart-wrapper .outer-box {
-    position: absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-}
-
-.chart-wrapper .inner-box {
-    width: 100%;
-    height: 100%;
-}
-
-.chart-wrapper text {
-  font-family: sans-serif;
-  font-size: 14px;
-}
-
-.chart-wrapper p {
-    font-size: 16px;
-    margin-top:5px;
-    margin-bottom: 40px;
-}
-
-.chart-wrapper .axis path,
-.chart-wrapper .axis line {
-    fill: none;
-    stroke: black;
-    stroke-opacity: 0.7;
-    shape-rendering: crispEdges;
-
-}
-.chart-wrapper .axis path {
-  stroke-width: 1px;
-}
-
-.chart-wrapper .line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 5px;
-}
-
-.chart-wrapper .legend  {
-    min-width: 200px;
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    font-size: 16px;
-    padding: 10px 40px;
-}
-.chart-wrapper .legend > div {
-    margin: 0px 25px 10px 0px;
-    flex-grow: 0;
-}
-.chart-wrapper .legend p {
-    display:inline;
-    font-size: 0.8em;
-    font-family: sans-serif;
-    font-weight: 600;
-}
-.chart-wrapper .legend .series-marker {
-    height: 1em;
-    width: 1em;
-    border-radius: 35%;
-    background-color: crimson;
-    display: inline-block;
-    margin-right: 4px;
-    margin-bottom: -0.16rem;
-}
-
-.chart-wrapper .overlay {
-  fill: none;
-  pointer-events: all;
-}
-
-.chart-wrapper .focus circle {
-  fill: orange;
-  stroke: orange;
-  stroke-width: 2px;
-  fill-opacity: 15%;
-}
-.chart-wrapper .focus rect {
-    fill: black;
-    opacity: 0.8;
-    border-radius: 2px;
-}
-.chart-wrapper .focus.line {
-    stroke: steelblue;
-    stroke-dasharray: 2,5;
-    stroke-width: 2;
-    opacity: 0.5;
-}
-@media (max-width:500px){
-    .chart-wrapper .line {stroke-width: 3px;}
-    .chart-wrapper .legend {font-size: 14px;}
-}
-</style-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 
 <style type="text/css">
 /* 13. Basic Styling with CSS */
@@ -158,20 +51,131 @@
 
 </style>
 
+<style type="text/css">
+    .range {
+  position: relative;
+  width: 100%;
+  height: 5px;
+}
 
-<!--script type="text/javascript" src="{{ url_for('static', filename='d3.js') }}"></script-->
-<script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='map_render.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='index_bar.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='line_chart.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='household_scatter_plot.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
+.range input {
+  width: 100%;
+  position: absolute;
+  top: 2px;
+  height: 0;
+  -webkit-appearance: none;
+}
+.range input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: -8px 0  0;
+  border-radius: 50%;
+  background: #9B2377;
+  cursor: pointer;
+  border: 0 !important;
+}
+.range input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  margin: -8px 0  0;
+  border-radius: 50%;
+  background: #9B2377;
+  cursor: pointer;
+  border: 0 !important;
+}
+.range input::-ms-thumb {
+  width: 18px;
+  height: 18px;
+  margin: -8px 0  0;
+  border-radius: 50%;
+  background: #9B2377;
+  cursor: pointer;
+  border: 0 !important;
+}
+.range input::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #b2b2b2;
+}
+.range input::-moz-range-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #b2b2b2;
+}
+.range input::-ms-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #b2b2b2;
+}
+.range input:focus {
+  background: none;
+  outline: none;
+}
+.range input::-ms-track {
+  width: 100%;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.range-labels {
+  margin: 18px -41px 0;
+  padding: 0;
+  list-style: none;
+}
+.range-labels li {
+  position: relative;
+  float: left;
+  width: 90.25px;
+  text-align: center;
+  color: #b2b2b2;
+  font-size: 14px;
+  cursor: pointer;
+}
+.range-labels li::before {
+  position: absolute;
+  top: -25px;
+  right: 0;
+  left: 0;
+  content: "";
+  margin: 0 auto;
+  width: 9px;
+  height: 9px;
+  background: #b2b2b2;
+  border-radius: 50%;
+}
+.range-labels .active {
+  color: #9B2377;
+}
+.range-labels .selected::before {
+  background: #9B2377;
+}
+.range-labels .active.selected::before {
+  display: none;
+}
+
+</style>
+
+
 
 <body>
-    <h1 class="text-center mt-4">Gender Equality Index</h1>
-    <h3 class="text-center">Measuring gender equality in the European Union (2005 - 2015)</h3>
+    <script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='slider.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='map_render.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='index_bar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='line_chart.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='diverging_bar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
+
+    <h3 class="text-center mt-4">Gender Equality Index</h1>
+    <h6 class="text-center">Measuring gender equality in the European Union (2005 - 2015)</h3>
     <br>
     
     <div class="container-fluid mt-0 pl-5 pr-5">
@@ -195,15 +199,20 @@
                                 <a class="dropdown-item" href="#">Health</a>
                               </div>
                         </div>
-                        <div class="btn-group mr-n0">
-                              <button id="dropdown_btn2" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2015</button>
-                              <div class="dropdown-menu dropdown-menu-right" id="domain_drop2">
-                                <a class="dropdown-item" href="#">2005</a>
-                                <a class="dropdown-item" href="#">2010</a>
-                                <a class="dropdown-item" href="#">2012</a>
-                                <a class="dropdown-item" href="#">2015</a>
-                              </div>
+
+                        <div style="padding-top: 25px">
+                        <div class="range">
+                          <input type="range" id="newSlider" min="1" max="4" steps="1" value="1" />
                         </div>
+
+                        <ul class="range-labels">
+                          <li class="active selected">2005</li>
+                          <li>2010</li>
+                          <li>2012</li>
+                          <li>2015</li>
+                        </ul>
+                    </div>
+
                         
 
                     </nav>
@@ -234,11 +243,19 @@
                     <h6 id="caption2" class="text-center">Overall</h6>
             </div>
             <input id="chosen_country" style="display:none;"></input>
-            </div>
-
         </div>
-        <div class="row">
-            
+
+        <!--/div-->
+
+        <div class="row vh-100">
+            <div class=" border mt-4 col-6 h-50">
+                    
+                    <svg id="vis4" class="h-75 col-12 mt-4">
+                    </svg>
+                    <h6 id="caption3" class="text-center">Overall</h6>
+            </div>
+        </div>
+
 
         </div>
     </div>

@@ -81,8 +81,10 @@ class DataReader:
         self.power_data = {}
         for year in self.year_data:
             tmp = self.year_data[year][cols_of_interest].dropna()
-            tmp.rename(columns={'Share of board members of publically owned broadcasting organisations (%)  M':"broadcasting_men",
-                                'Share of board members of publically owned broadcasting organisations (%)  W':"broadcasting_women"}, inplace=True)
+
+            #tmp.rename(columns={'Share of board members of publically owned broadcasting organisations (%)  M':"broadcasting_men",
+            #                    'Share of board members of publically owned broadcasting organisations (%)  W':"broadcasting_women"}, inplace=True)
+
             tmp = json.loads(tmp.to_json(orient='records'))
             self.power_data[year]= tmp
 

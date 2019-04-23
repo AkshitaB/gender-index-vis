@@ -5,9 +5,9 @@ function LineChart2(svg_elem, full_data) {
     
     this.domain_color_map = {
         "Overall":"#17a2b8",
-        "Work":"#007bff",
+        "Work":"#017EDA",
         "Money":"#28a745",
-        "Knowledge":"red",
+        "Knowledge":"#B40E00",
         "Time":"#ffc107",
         "Power":"#e83e8c",
         "Health":"#6610f2"
@@ -42,7 +42,7 @@ function LineChart2(svg_elem, full_data) {
         var width = curr_obj.width;
         var height = curr_obj.height;
 
-        console.log(data)
+        //console.log(data)
           
         var dataset_1 = [];
         var dataset_2 = [];
@@ -53,7 +53,7 @@ function LineChart2(svg_elem, full_data) {
             //dataset_2.push({"y":Math.round((data[idx]['country_output'] - 10) * 100) / 100})
         }
 
-        console.log(dataset_1)
+        //console.log(dataset_1)
 
         var dataset_countries = [dataset_1];
 
@@ -126,7 +126,7 @@ function LineChart2(svg_elem, full_data) {
                 .enter().append("circle") // Uses the enter().append() method
                 .attr("class", "dot") // Assign a class for styling
                 .attr("cx", function(d, i) { return xScale(i) + marginX })
-                .attr("cy", function(d) { console.log(d.y); return curr_obj.height - (yScale(d.y)) + within_margin})
+                .attr("cy", function(d) { return curr_obj.height - (yScale(d.y)) + within_margin})
                 .attr("r", 5)
                 .style("fill", curr_obj.domain_color_map[domain]);
         }
@@ -138,7 +138,7 @@ function LineChart2(svg_elem, full_data) {
             .enter().append("circle") // Uses the enter().append() method
             .attr("class", "dot2") // Assign a class for styling
             .attr("cx", function(d, i) { return xScale(i) + marginX})
-            .attr("cy", function(d) { console.log(d.y); return curr_obj.height - yScale(d.y) + within_margin })
+            .attr("cy", function(d) { return curr_obj.height - yScale(d.y) + within_margin })
             .attr("r", 5)
             .attr("fill", "gray");
 
@@ -203,7 +203,7 @@ function LineChart2(svg_elem, full_data) {
                     var yOther = dataset_eu[j]["y"];
                     var chosenY = Math.max(yThis, yOther);
                     var endY = Math.min(yThis, yOther);
-                    console.log(chosenY)
+                    //console.log(chosenY)
                     chosenY = yScale.invert(chosenY) - margin;
                     endY = yScale.invert(endY);
                     focus2.select(".focus.line").attr("transform", "translate(" + xScale(x0) + ")").attr("y1", yScale(chosenY));
@@ -269,7 +269,7 @@ function LineChart2(svg_elem, full_data) {
                 var yOther = dataset[j]["y"];
                 var chosenY = Math.max(yThis, yOther);
                 var endY = Math.min(yThis, yOther);
-                console.log(chosenY)
+                //console.log(chosenY)
                 chosenY = yScale.invert(chosenY) - margin;
                 endY = yScale.invert(endY);
                 focus2.select(".focus.line").attr("transform", "translate(" + xScale(x0) + ")").attr("y1", yScale(chosenY));
