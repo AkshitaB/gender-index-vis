@@ -97,7 +97,7 @@ function FilterData(data) {
 
 var year_mapper = {"1":"2005", "2":"2010", "3":"2012", "4":"2015"};
 
-function add_dropdown_event(filter_obj, render_bar) {
+function add_dropdown_event(filter_obj) {
 
     $("#domain_drop a").click(function(e){
         e.preventDefault(); // cancel the link behaviour
@@ -106,25 +106,19 @@ function add_dropdown_event(filter_obj, render_bar) {
         console.log(selText);
         $("#dropdown_btn").text(selText);
         $("#caption").text(selText);
+        $("#caption2").text(selText);
         change_vis1(filter_obj);
         change_vis2(filter_obj);
     });
 
 }
 
-/*function update_domain_year(new_domain, year, filter_obj, render_bar) {
-    console.log(year)
-    console.log(new_domain)
-    var overall_index = filter_obj.read_overall_index(year, new_domain.toUpperCase());
-    console.log(overall_index);
-
-    render_bar.update(new_domain, overall_index);
-}*/
-
 function change_vis2(filter_obj) {
     var country_code = $("#chosen_country").text();
+    console.log(country_code)
+    console.log("hhh")
     $("#vis2").empty();
-    if (country_code === "EU-28") {
+    if (country_code === "EU-28" || country_code === "") {
 
     }
     else {
@@ -189,7 +183,7 @@ function data_callback(data) {
     var render_bar = new IndexBar("#vis1", filter_obj.data);
     render_bar.render_bar("Overall", overall_index);
 
-    add_dropdown_event(filter_obj, render_bar);
+    add_dropdown_event(filter_obj);
 
     add_time_slider_event(filter_obj);
 

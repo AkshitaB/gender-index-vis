@@ -116,9 +116,6 @@ function LineChart2(svg_elem, full_data) {
             .style("stroke", "gray")
             .style("stroke-dasharray", "5");
 
-        //var focus = svg.append("g").attr("class", "focus").style("display", "none");
-        //focus.append("line").attr("class", "focus line").attr("x1", 0).attr("x2", 0).attr("y1", 100).attr("y2", height).style("stroke", "black");
-
         var focus2 = svg.append("g").attr("class", "focus").style("display", "none");
         focus2.append("line").attr("class", "focus line").attr("x1", 0).attr("x2", 0).attr("y1", 0).attr("y2", height - margin).style("stroke", "black");
 
@@ -142,13 +139,28 @@ function LineChart2(svg_elem, full_data) {
             .attr("cy", function(d) { console.log(d.y); return curr_obj.height - yScale(d.y) })
             .attr("r", 5)
             .attr("fill", "gray");
-            /*.attr("data-html", "true")
-            .attr("data-toggle", function(d, i) {
-                $(this).tooltip({'title': '<b>EU-28 Index:</b> ' + 
-                                          d.y
-                                });
-                return "tooltip";
-            });*/
+
+
+        svg.append("text")
+            .attr("class", "legend")    // style the legend
+            .style("fill", "gray")
+            .style("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", "16px")
+            .attr("x", curr_obj.width - xScale(1)/2)
+            .attr("y", curr_obj.height/2)
+            .text("EU-28"); 
+
+        svg.append("text")
+            .attr("class", "legend")    // style the legend
+            .style("fill", curr_obj.domain_color_map[domain])
+            .style("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", "16px")
+            .attr("x", curr_obj.width - xScale(1)/2)
+            .attr("y", curr_obj.height/2 + margin)
+            .text(country);
+
 
         svg.selectAll(".dot")
             .attr("data-html", "true")
