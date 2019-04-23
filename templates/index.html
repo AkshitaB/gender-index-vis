@@ -165,6 +165,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='index_bar.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='line_chart.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
 
 <body>
@@ -224,7 +225,13 @@
                     <h6 id="caption2" class="text-center">Overall</h6>
             </div>
             <input id="chosen_country" style="display:none;"></input>
-            
+            <hr>
+            <hr>
+            <br>
+            <div class=" border mt-4 col-12 h-50">
+                    <svg id="vis3" class="h-75 col-12 mt-4">
+                    </svg>
+            </div>
                 
 
                 
