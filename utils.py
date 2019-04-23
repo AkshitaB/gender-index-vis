@@ -60,7 +60,9 @@ class DataReader:
                             'Career Prospects Index (points, 0-100) W', 'Career Prospects Index (points, 0-100) M', \
                             'People doing cooking and/or household, every day (%) W', 'People doing cooking and/or household, every day (%) M', \
                             'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W',\
-                            'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
+                            'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M',\
+                            'People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) W',\
+                            'People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) M']
         self.household_data = {}
         for year in self.year_data:
             tmp = self.year_data[year][cols_of_interest].dropna()

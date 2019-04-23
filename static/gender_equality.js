@@ -79,20 +79,21 @@ function FilterData(data) {
             female_tuple['country'] = rel_data[i]['Country']
             female_tuple['career'] = rel_data[i]['Career Prospects Index (points, 0-100) W']
             female_tuple['household_duties'] = rel_data[i]['People doing cooking and/or household, every day (%) W']
-            female_tuple['leisure'] = rel_data[i]['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W']
-            female_tuple['gender'] = 'female';
+            female_tuple['care'] = rel_data[i]['People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) W']
+            female_tuple['gender'] = 'Female';
 
             male_tuple['country'] = rel_data[i]['Country']
             male_tuple['career'] = rel_data[i]['Career Prospects Index (points, 0-100) M']
             male_tuple['household_duties'] = rel_data[i]['People doing cooking and/or household, every day (%) M']
-            male_tuple['leisure'] = rel_data[i]['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
-            male_tuple['gender'] = 'male';
+            male_tuple['care'] = rel_data[i]['People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) M']
+            male_tuple['gender'] = 'Male';
 
             household.push(female_tuple)
             household.push(male_tuple)
         }
         return household;
     }
+
 
     this.read_power_data = function(year, country) {
         // console.log(this.data);
@@ -200,6 +201,19 @@ function add_dropdown_event(filter_obj) {
 
 }
 
+function change_vis5(filter_obj){
+    $('#vis5').empty();
+
+    var year = get_year();
+
+    var domain = get_domain();
+
+    var household_data = filter_obj.read_household_leisure_career_data(year);
+
+    var render_plot = new HouseholdScatterPlot("#vis5", filter_obj.data);
+    render_plot.render_household_plot(household_data);
+}
+
 function change_vis4(filter_obj){
 
     $("#vis4").empty();
@@ -276,6 +290,7 @@ function add_time_slider_event(filter_obj) {
         change_vis1(filter_obj);
         change_vis3(filter_obj);
         change_vis4(filter_obj);
+        change_vis5(filter_obj);
     });
 
     // Change input value on label click
@@ -315,6 +330,8 @@ function data_callback(data) {
 
     change_vis3(filter_obj);
     change_vis2(filter_obj);
+
+    change_vis5(filter_obj);
 
     add_dropdown_event(filter_obj);
 

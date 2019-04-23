@@ -79,8 +79,9 @@ function HouseholdScatterPlot(svg_elem, full_data){
         	   .style("fill", "white")
         	   .attr("data-html", "true")
         	   .attr("data-toggle", function(d, i) {
+        	   		var country_name = curr_obj.full_data['countries'][d.country];
                 	$(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d.country + '<br><b>x:</b> ' + 
+                                          country_name + '<br><b>x:</b> ' + 
                                           Math.round(d.care * 100) / 100 + " %" + '<br><b>y: </b>' + Math.round(d.household_duties * 100) / 100 + "%"
                                 });
                 	return "tooltip";
@@ -89,10 +90,11 @@ function HouseholdScatterPlot(svg_elem, full_data){
         	   		d3.select(this).style("stroke","black")
         	   					   .attr("r", 8)
         	   					   .style("stroke-width", 3)
-                	$(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          d.country + '<br><b>x:</b> ' + 
-                                          Math.round(d.care * 100) / 100 + " %" + '<br><b>y:</b>' + Math.round(d.household_duties * 100) / 100 + "%"
-                    });
+                	//$(this).tooltip({'title': '<b>Country:</b> ' + 
+                    //                      d.country + '<br><b>x:</b> ' + 
+                    //                      Math.round(d.care * 100) / 100 + " %" + '<br><b>y:</b>' + Math.round(d.household_duties * 100) / 100 + "%"
+                    //});
+                    $(this).tooltip();
         	   })
         	   .on("mouseout", function(d){
         	   		d3.select(this).style("stroke", function(d) { return curr_obj.gender_color_map[d.gender]})
@@ -115,7 +117,7 @@ function HouseholdScatterPlot(svg_elem, full_data){
 			//Create Y axis
 		svg.append("g")
 				.attr("class", "axis")
-				.attr("transform", "translate(" + curr_obj.margin + ", " + curr_obj.marginX+ ")")
+				.attr("transform", "translate(" + curr_obj.marginX + ", " + curr_obj.margin+ ")")
 				.call(yAxis)
 			.append("text")
 		      	.attr("class", "label")

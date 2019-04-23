@@ -171,11 +171,48 @@
     <script type="text/javascript" src="{{ url_for('static', filename='line_chart.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='household_scatter_plot.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='diverging_bar.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
 
-    <h3 class="text-center mt-4">Gender Equality Index</h1>
-    <h6 class="text-center">Measuring gender equality in the European Union (2005 - 2015)</h3>
+    <div class="container-fluid pl-5 pr-5">
+        <div class="row">
+    <h3 class="text-center mt-4">Gender Equality Index</h3>
+    </div>
+    <div class="row">
+    <h6 class="text-center">Measuring gender equality in the European Union (2005 - 2015)</h6>
+    </div>
+    <!--nav class="navbar navbar-light bg-light w-100">
+                        <div class="btn-group">
+                              <button id="dropdown_btn" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Overall</button>
+                              <div class="dropdown-menu" id="domain_drop">
+                                <a class="dropdown-item" href="#">Overall</a>
+                                <a class="dropdown-item" href="#">Work</a>
+                                <a class="dropdown-item" href="#">Money</a>
+                                <a class="dropdown-item" href="#">Knowledge</a>
+                                <a class="dropdown-item" href="#">Time</a>
+                                <a class="dropdown-item" href="#">Power</a>
+                                <a class="dropdown-item" href="#">Health</a>
+                              </div>
+                        </div>
+
+                        <div style="padding-top: 25px">
+                        <div class="range">
+                          <input type="range" id="newSlider" min="1" max="4" steps="1" value="1" />
+                        </div>
+
+                        <ul class="range-labels">
+                          <li class="active selected">2005</li>
+                          <li>2010</li>
+                          <li>2012</li>
+                          <li>2015</li>
+                        </ul>
+                    </div>
+
+                        
+
+                    </nav-->
+    </div>
     <br>
     
     <div class="container-fluid mt-0 pl-5 pr-5">
@@ -185,8 +222,7 @@
                     <h5 class="text-center w-100">Gender Equality Across Domains</h5>
                 </div>
                 <div class="row">
-                    <nav class="navbar navbar-light bg-light w-100">
-                        <!--span class="navbar-brand mb-0 h1">Navbar</span-->
+                    <nav class="navbar navbar-light sticky-top bg-light w-100">
                         <div class="btn-group">
                               <button id="dropdown_btn" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Overall</button>
                               <div class="dropdown-menu" id="domain_drop">
@@ -246,6 +282,27 @@
         </div>
 
         <!--/div-->
+
+        <div class="row vh-100">
+            <div class=" border mt-4 col-6 h-50">
+                    
+                    <svg id="vis5" class="h-75 col-12 mt-4">
+                    </svg>
+                    <h6 id="caption5" class="text-center">Overall</h6>
+            </div>
+            <!--div class="btn-group col-6">
+                  <button id="dropdown_btn_indicators" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Overall</button>
+                  <div class="dropdown-menu" id="domain_drop">
+                    <a class="dropdown-item" href="#">Overall</a>
+                    <a class="dropdown-item" href="#">Work</a>
+                    <a class="dropdown-item" href="#">Money</a>
+                    <a class="dropdown-item" href="#">Knowledge</a>
+                    <a class="dropdown-item" href="#">Time</a>
+                    <a class="dropdown-item" href="#">Power</a>
+                    <a class="dropdown-item" href="#">Health</a>
+                  </div>
+            </div-->
+        </div>
 
         <div class="row vh-100">
             <div class=" border mt-4 col-6 h-50">
