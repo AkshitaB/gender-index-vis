@@ -166,6 +166,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='line_chart.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='household_scatter_plot.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
 
 <body>
@@ -195,7 +196,7 @@
                               </div>
                         </div>
                         <div class="btn-group mr-n0">
-                              <button id="dropdown_btn2" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Year</button>
+                              <button id="dropdown_btn2" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">2015</button>
                               <div class="dropdown-menu dropdown-menu-right" id="domain_drop2">
                                 <a class="dropdown-item" href="#">2005</a>
                                 <a class="dropdown-item" href="#">2010</a>
@@ -221,27 +222,12 @@
                         <h6 class="text-center mt-2">Distribution Across Sub-domains</h6>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="text-center w-100">
-
-                        <input id="sliderElem" type="text"
-                              data-provide="slider"
-                              data-slider-ticks='["1", "2", "3", "4"]'
-                              data-slider-ticks-labels='["2005", "2010", "2012", "2015"]'
-                              data-slider-min="1"
-                              data-slider-max="3"
-                              data-slider-step="1"
-                              data-slider-value="4"
-                              data-slider-tooltip="hide"
-                              style="width: 100%" />
-                        </div>
-                </div>
             </div>
        
 
         </div>
         <div class="row vh-100">
-            <div class=" border mt-4 col-6 h-50">
+            <div class=" border mt-0 col-6 h-50">
                     
                     <svg id="vis2" class="h-75 col-12 mt-4">
                     </svg>
@@ -249,6 +235,10 @@
             </div>
             <input id="chosen_country" style="display:none;"></input>
             </div>
+
+        </div>
+        <div class="row">
+            
 
         </div>
     </div>

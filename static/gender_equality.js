@@ -94,6 +94,28 @@ function FilterData(data) {
         return household;
     }
 
+    this.read_test = function(year) {
+        console.log(this.data['power_data']);
+        var household = [];
+        var rel_data = this.data['power_data'][year]
+        for (var i=0; i<rel_data.length; i++) {
+            var female_tuple = {};
+            var male_tuple = {};
+            console.log(rel_data[i])
+            female_tuple['country'] = rel_data[i]['Country']
+            female_tuple['broadcasting'] = rel_data[i]['broadcasting_women']
+            female_tuple['gender'] = 'female';
+
+            male_tuple['country'] = rel_data[i]['Country']
+            male_tuple['broadcasting'] = rel_data[i]['broadcasting_men']
+            male_tuple['gender'] = 'male';
+
+            household.push(female_tuple)
+            household.push(male_tuple)
+        }
+        return household;
+    }
+
     this.read_sub_domains = function(year, domain){
         if(domain == 'OVERALL'){
             return null;
@@ -122,7 +144,7 @@ function FilterData(data) {
 
 var year_mapper = {"1":"2005", "2":"2010", "3":"2012", "4":"2015"};
 
-function add_dropdown_event(filter_obj) {
+function add_dropdown_event_domain(filter_obj) {
 
     $("#domain_drop a").click(function(e){
         e.preventDefault(); // cancel the link behaviour
@@ -139,14 +161,38 @@ function add_dropdown_event(filter_obj) {
 
 }
 
+function add_dropdown_event_year(filter_obj) {
+
+    $("#domain_drop2 a").click(function(e){
+        e.preventDefault(); // cancel the link behaviour
+
+        var selText = $(this).text();
+        console.log(selText);
+        $("#dropdown_btn2").text(selText);
+        change_vis1(filter_obj);
+        change_vis2(filter_obj);
+        change_vis3(filter_obj);
+    });
+
+}
+
+function get_domain() {
+    var domain = $("#dropdown_btn").text();
+    return domain;
+}
+
+function get_year() {
+    var year = $("#dropdown_btn2").text();
+    return year;
+}
+
 function change_vis3(filter_obj){
 
     $("#vis3").empty();
-    var mySlider = $("#sliderElem").slider();
-    var year = mySlider.slider('getValue');
-    year = year_mapper[year];
 
-    var domain = $("#dropdown_btn").text();
+    var year = get_year();
+
+    var domain = get_domain();
 
     if(domain != 'Overall'){
         var sub_domains = filter_obj.read_sub_domains(year, domain.toUpperCase());
@@ -155,6 +201,9 @@ function change_vis3(filter_obj){
         var render_map = new HeatMap("#vis3", filter_obj.data);
         render_map.render_heat_map(domain, sub_domains, sub_domain_data);
     }else{
+        //var sub_domains = Object.keys(filter_obj.data["domains"]);
+        //var sub_domain_data = filter_obj.read_sub_domain_data(year, domain)
+
         render_map.remove();
     }
     
@@ -168,7 +217,7 @@ function change_vis2(filter_obj) {
 
     }
     else {
-        var domain = $("#dropdown_btn").text(); //TODO: This is the dropdown from first vis.
+        var domain = get_domain();
 
         var per_country = filter_obj.read_country_index_over_years(country_code, domain.toUpperCase());
         console.log(per_country);
@@ -183,15 +232,11 @@ function change_vis2(filter_obj) {
 
 function change_vis1(filter_obj) {
 
-    var mySlider = $("#sliderElem").slider();
-    var value = mySlider.slider('getValue');
-    console.log(value)
-
     $("#vis1").empty();
-    var year = mySlider.slider('getValue');
 
-    year = year_mapper[year];
-    var domain = $("#dropdown_btn").text();
+    var year = get_year();
+
+    var domain = get_domain();
 
     var overall_index = filter_obj.read_overall_index(year, domain.toUpperCase());
     console.log(overall_index);
@@ -201,7 +246,7 @@ function change_vis1(filter_obj) {
 
 }
 
-function add_time_slider_event(filter_obj) {
+/*function add_time_slider_event(filter_obj) {
 
     var mySlider = $("#sliderElem").slider();
 
@@ -210,7 +255,7 @@ function add_time_slider_event(filter_obj) {
         change_vis3(filter_obj);
     });
 
-}
+}*/
 
 function add_country_selection_event(filter_obj) {
     $("#chosen_country").change(function() {
@@ -230,11 +275,15 @@ function data_callback(data) {
     var render_bar = new IndexBar("#vis1", filter_obj.data);
     render_bar.render_bar("Overall", overall_index);
 
-    add_dropdown_event(filter_obj);
+    add_dropdown_event_domain(filter_obj);
+    add_dropdown_event_year(filter_obj);
 
-    add_time_slider_event(filter_obj);
+    //add_time_slider_event(filter_obj);
 
     add_country_selection_event(filter_obj);
+
+    var power = filter_obj.read_test('2015');
+    console.log(power)
 
     
 

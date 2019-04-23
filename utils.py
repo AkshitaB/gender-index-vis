@@ -16,6 +16,7 @@ class DataReader:
         self.__init_countries()
         self.__simplify()
         self.__household_data()
+        self.__power_data()
 
     def __init_metadata(self):
         self.domains = ['WORK', 'MONEY', 'KNOWLEDGE', 'TIME', 'POWER', 'HEALTH']
@@ -66,6 +67,25 @@ class DataReader:
             tmp = json.loads(tmp.to_json(orient='records'))
             self.household_data[year] = tmp
 
+    def __power_data(self):
+        cols_of_interest = ['Country', 'Share of ministers (%) W', 'Share of ministers (%) M','Share of members of parliament (%) W', 'Share of members of parliament (%) M', \
+                            'Share of members of regional assemblies (%) W', 'Share of members of regional assemblies (%) M', \
+                            'Share of members of boards in largest quoted companies, supervisory board or board of directors (%) W', \
+                            'Share of members of boards in largest quoted companies, supervisory board or board of directors (%) M', 'Share of board members of central bank (%) W', \
+                            'Share of board members of central bank (%) M', 'Share of board members of research funding organisations (%) W', \
+                            'Share of board members of research funding organisations (%) M', 'Share of board members of publically owned broadcasting organisations (%)  W', \
+                            'Share of board members of publically owned broadcasting organisations (%)  M', \
+                            'Share of members of highest decision making body of the national Olympic sport organisations (%)  W', \
+                            'Share of members of highest decision making body of the national Olympic sport organisations (%)  M']
+            
+        self.power_data = {}
+        for year in self.year_data:
+            tmp = self.year_data[year][cols_of_interest].dropna()
+            tmp.rename(columns={'Share of board members of publically owned broadcasting organisations (%)  M':"broadcasting_men",
+                                'Share of board members of publically owned broadcasting organisations (%)  W':"broadcasting_women"}, inplace=True)
+            tmp = json.loads(tmp.to_json(orient='records'))
+            self.power_data[year]= tmp
+
 
 
     def construct_data(self):
@@ -74,6 +94,7 @@ class DataReader:
         self.simple_data['countries'] = self.countries
         self.simple_data['domains'] = self.subdomains
         self.simple_data['household_data'] = self.household_data
+        self.simple_data['power_data'] = self.power_data
 
     def jsonify(self):
         self.construct_data()
