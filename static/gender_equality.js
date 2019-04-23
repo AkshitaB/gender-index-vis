@@ -94,6 +94,34 @@ function FilterData(data) {
         return household;
     }
 
+    this.read_scatterplot_data = function(year, indicator1, indicator2) {
+        var scatterplot_data = [];
+        console.log(this.data)
+        var rel_data = this.data['year_data'][year];
+        console.log(rel_data)
+        var indicator_map = this.data['indicator_column_map'];
+        console.log(indicator_map)
+        console.log(indicator1)
+        for (var i=0; i<rel_data.length; i++) {
+            var female_tuple = {};
+            var male_tuple = {};
+            if (rel_data[i]['Country']) {
+                female_tuple['country'] = rel_data[i]['Country']
+                female_tuple[indicator1] = rel_data[i][indicator_map[indicator1][0]]
+                female_tuple[indicator2] = rel_data[i][indicator_map[indicator2][0]]
+                female_tuple['gender'] = 'Female';
+
+                male_tuple['country'] = rel_data[i]['Country']
+                male_tuple[indicator1] = rel_data[i][indicator_map[indicator1][1]]
+                male_tuple[indicator2] = rel_data[i][indicator_map[indicator2][1]]
+                male_tuple['gender'] = 'Male';
+
+                scatterplot_data.push(female_tuple)
+                scatterplot_data.push(male_tuple)
+            }
+        }
+        return scatterplot_data;
+    }
 
     this.read_power_data = function(year, country) {
         // console.log(this.data);
@@ -208,10 +236,24 @@ function change_vis5(filter_obj){
 
     var domain = get_domain();
 
-    var household_data = filter_obj.read_household_leisure_career_data(year);
+    //var household_data = filter_obj.read_household_leisure_career_data(year);
 
-    var render_plot = new HouseholdScatterPlot("#vis5", filter_obj.data);
-    render_plot.render_household_plot(household_data);
+    //var render_plot = new HouseholdScatterPlot("#vis5", filter_obj.data);
+    //render_plot.render_household_plot(household_data);
+
+    var indicator1 = get_indicator1();
+    var indicator2 = get_indicator2();
+
+    console.log(indicator1)
+    console.log(indicator2)
+
+    if (indicator1 !== "Select indicator" && indicator2 !== "Select Indicator") {
+        var scatterplot_data = filter_obj.read_scatterplot_data(year, indicator1, indicator2);
+        console.log(scatterplot_data)
+        var render_plot = new ScatterPlot("#vis5", filter_obj.data);
+        render_plot.render_plot(scatterplot_data, indicator1, indicator2);
+    }
+
 }
 
 function change_vis4(filter_obj){
@@ -311,6 +353,55 @@ function add_country_selection_event(filter_obj) {
     });
 }
 
+function add_indicators(filter_obj) {
+    var indicator_menus = ["#domain_drop_indicator1", "#domain_drop_indicator2"];
+    for (var jdx in indicator_menus) {
+        for (var domain in filter_obj.data['indicators']) {
+            $(indicator_menus[jdx]).append('<a class="dropdown-item disabled" href="#">'+domain+'</a>');
+            for (var idx in filter_obj.data['indicators'][domain]) {
+                $(indicator_menus[jdx]).append('<a class="dropdown-item" href="#">'+filter_obj.data['indicators'][domain][idx]+'</a>');
+            }
+            $(indicator_menus[jdx]).append('<div class="dropdown-divider"></div></a>');
+        }
+    }
+}
+
+function get_indicator1() {
+    var indicator1 = $("#dropdown_btn_indicator1").text();
+    return indicator1;
+}
+
+function get_indicator2() {
+    var indicator2 = $("#dropdown_btn_indicator2").text();
+    return indicator2;
+}
+function add_indicator_events(filter_obj) {
+
+    $("#domain_drop_indicator1 a").click(function(e){
+        e.preventDefault(); // cancel the link behaviour
+
+        var selText = $(this).text();
+        console.log(selText);
+        $("#dropdown_btn_indicator1").text(selText);
+    });
+
+    $("#domain_drop_indicator2 a").click(function(e){
+        e.preventDefault(); // cancel the link behaviour
+
+        var selText = $(this).text();
+        console.log(selText);
+        $("#dropdown_btn_indicator2").text(selText);
+
+        /*var indicator1 = get_indicator1();
+        var indicator2 = get_indicator2();
+        var year = get_year();
+
+        var z = filter_obj.read_scatterplot_data(year, indicator1, indicator2);*/
+        
+        change_vis5(filter_obj);
+
+    });
+}
 
 function data_callback(data) {
     console.log('Data was loaded.');
@@ -338,6 +429,10 @@ function data_callback(data) {
     add_time_slider_event(filter_obj);
 
     add_country_selection_event(filter_obj);
+
+    add_indicators(filter_obj);
+
+    add_indicator_events(filter_obj);
 
 }
 

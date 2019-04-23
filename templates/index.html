@@ -172,6 +172,7 @@
     <script type="text/javascript" src="{{ url_for('static', filename='line_chart2.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='heat_map.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='household_scatter_plot.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scatter_plot.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='diverging_bar.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='gender_equality.js') }}"></script>
 
@@ -290,18 +291,19 @@
                     </svg>
                     <h6 id="caption5" class="text-center">Overall</h6>
             </div>
-            <!--div class="btn-group col-6">
-                  <button id="dropdown_btn_indicators" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Overall</button>
-                  <div class="dropdown-menu" id="domain_drop">
-                    <a class="dropdown-item" href="#">Overall</a>
-                    <a class="dropdown-item" href="#">Work</a>
-                    <a class="dropdown-item" href="#">Money</a>
-                    <a class="dropdown-item" href="#">Knowledge</a>
-                    <a class="dropdown-item" href="#">Time</a>
-                    <a class="dropdown-item" href="#">Power</a>
-                    <a class="dropdown-item" href="#">Health</a>
-                  </div>
-            </div-->
+            <div class="col-6">
+                <div class="btn-group">
+                      <button id="dropdown_btn_indicator1" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Indicator</button>
+                      <div class="dropdown-menu" id="domain_drop_indicator1">
+
+                      </div>
+                </div>
+                <div class="btn-group">
+                      <button id="dropdown_btn_indicator2" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select Indicator</button>
+                      <div class="dropdown-menu" id="domain_drop_indicator2">
+                      </div>
+                </div>
+            </div>
         </div>
 
         <div class="row vh-100">

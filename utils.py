@@ -17,6 +17,7 @@ class DataReader:
         self.__simplify()
         self.__household_data()
         self.__power_data()
+        self.__all_indicator_columns()
 
     def __init_metadata(self):
         self.domains = ['WORK', 'MONEY', 'KNOWLEDGE', 'TIME', 'POWER', 'HEALTH']
@@ -55,6 +56,12 @@ class DataReader:
             tmp = json.loads(tmp.to_json(orient='records'))
             self.index_data[year] = tmp
 
+        self.year_data_to_send = {}
+        for year in self.year_data:
+            tmp = self.year_data[year]
+            tmp = json.loads(tmp.to_json(orient='records'))
+            self.year_data_to_send[year] = tmp
+
     def __household_data(self):
         cols_of_interest = ['Country',
                             'Career Prospects Index (points, 0-100) W', 'Career Prospects Index (points, 0-100) M', \
@@ -90,15 +97,58 @@ class DataReader:
             tmp = json.loads(tmp.to_json(orient='records'))
             self.power_data[year]= tmp
 
+    def __all_indicator_columns(self):
+        '''
+        This only considers indicators that fall in the 0-100 range.
+        '''
+        indicator_column_map = {}
+        indicator_column_map['FTE employment rate (%)'] = ['FTE employment rate (%) W', 'FTE employment rate (%) M']
+        indicator_column_map['Employed in education, human health and social work (%)'] = ['Employed people in education, human health and social work activities (%) W', \
+                                                                                       'Employed people in education, human health and social work activities (%) M']
+        indicator_column_map['Ability to take time off during working hours for personal or family matters (%)'] = ['Ability to take one hour or two off during working hours to take care of personal or family matters (%) W', \
+                                                                                                                'Ability to take one hour or two off during working hours to take care of personal or family matters (%) M']
+        indicator_column_map['Career Prospects Index (points, 0-100)'] = ['Career Prospects Index (points, 0-100) W', \
+                                                                          'Career Prospects Index (points, 0-100) M']
+        indicator_column_map['Not at-risk-of-poverty (%)'] = ['Not at-risk-of-poverty (%) W', 'Not at-risk-of-poverty (%) M']
+        indicator_column_map['Income distribution S20/S80 (%)'] = ['Income distribution S20/S80 (%) W', 'Income distribution S20/S80 (%) M']
+        indicator_column_map['Graduates of tertiary education (%)'] = ['Graduates of tertiary education (%) W', 'Graduates of tertiary education (%) M']
+        indicator_column_map['People participating in formal or non-formal education (%)'] = ['People participating in formal or non-formal education (%) W', \
+                                                                                              'People participating in formal or non-formal education (%) M']
+        indicator_column_map['Tertiary students in education, health and welfare, humanities and arts (%)'] = ['Tertiary students in education, health and welfare, humanities and arts (%) W',
+                                                                                                               'Tertiary students in education, health and welfare, humanities and arts (%) M']
+
+
+
+
+        indicators = {}
+        indicators['WORK'] = ['FTE employment rate (%)',
+                              'Employed in education, human health and social work (%)',
+                              'Ability to take time off during working hours for personal or family matters (%)',
+                              'Career Prospects Index (points, 0-100)']
+
+        indicators['MONEY'] = ['Not at-risk-of-poverty (%)',
+                               'Income distribution S20/S80 (%)']
+
+        indicators['KNOWLEDGE'] = ['Graduates of tertiary education (%)',
+                                   'People participating in formal or non-formal education (%)',
+                                   'Tertiary students in education, health and welfare, humanities and arts (%)']
+
+
+        self.indicators = indicators
+        self.indicator_column_map = indicator_column_map
+
 
 
     def construct_data(self):
         self.simple_data = {}
+        self.simple_data['year_data'] = self.year_data_to_send
         self.simple_data['index_data'] = self.index_data
         self.simple_data['countries'] = self.countries
         self.simple_data['domains'] = self.subdomains
         self.simple_data['household_data'] = self.household_data
         self.simple_data['power_data'] = self.power_data
+        self.simple_data['indicators'] = self.indicators
+        self.simple_data['indicator_column_map'] = self.indicator_column_map
 
     def jsonify(self):
         self.construct_data()
