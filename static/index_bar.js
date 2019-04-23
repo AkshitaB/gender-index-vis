@@ -5,9 +5,9 @@ function IndexBar(svg_elem, full_data) {
 
     this.domain_color_map = {
         "Overall":"#17a2b8",
-        "Work":"#007bff",
+        "Work":"#017EDA",
         "Money":"#28a745",
-        "Knowledge":"red",
+        "Knowledge":"#B40E00",
         "Time":"#ffc107",
         "Power":"#e83e8c",
         "Health":"#6610f2"
@@ -58,12 +58,13 @@ function IndexBar(svg_elem, full_data) {
 
         var records = curr_obj.get_sorted_records(overall_index);
 
-        //https://jsfiddle.net/matehu/w7h81xz2/
+        var selected = null;
 
         svg.selectAll("rect")
            .data(records)
            .enter()
            .append("rect")
+           .attr("class","bar_chart")
            .attr("x", function(d, i) {
                 return marginX + xScale(i);
            })
@@ -76,6 +77,10 @@ function IndexBar(svg_elem, full_data) {
            })
            .attr("data-toggle", "tooltip")
            .attr("data-html", "true")
+           .attr("my_color", function(d){
+                if(d.key=="EU-28") return "gray";
+                return curr_obj.domain_color_map[domain];
+           })
            .attr("fill", function(d) {
                 var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
@@ -90,10 +95,31 @@ function IndexBar(svg_elem, full_data) {
            .attr("selected", "false")
            .on("click", function(d) {
 
-                //d3.select(this)
-                 //   .attr("selected", "true");
+                 if(d3.select(this).attr("selected") == "false"){
+
+                    if(selected){
+                      selected.style("fill", selected.attr("my_color"))
+                              .attr("selected", "false")
+                    }
+
+                    selected = d3.select(this);
+
+                    d3.select(this).style("fill","black")
+                      .attr("selected","true");
+
                     $("#chosen_country").text(d["key"]);
                     $("#chosen_country").change();
+
+
+                 }else{
+                    //console.log("In else statement")
+                    selected = null;
+                    var fill_color = curr_obj.domain_color_map[domain];
+                    if(d.key == "EU-28") fill_color = "gray";
+                    d3.select(this).style("fill", fill_color)
+                      .attr("selected","false");
+                 }
+                    
 
                 /*var is_clicked = d3.select(this).attr("selected");
                 console.log(is_clicked)
@@ -122,9 +148,9 @@ function IndexBar(svg_elem, full_data) {
            })
            
            .on("mouseover", function(d, j) {
-
+                if(d3.select(this).attr("selected") != "true"){
                 d3.select(this)
-                .style("fill", "orange");
+                .style("fill", "orange");}
 
                 var country = curr_obj.full_data['countries'][d['key']];
                 $(this).tooltip({'title': '<b>Country:</b> ' + 
@@ -134,17 +160,18 @@ function IndexBar(svg_elem, full_data) {
 
                })
             .on("mouseout", function(d, j) {
-                if (d["key"] == "EU-28") {
-                    var fill_color = "gray"
+                if(d3.select(this).attr("selected") != "true")
+                {if (d["key"] == "EU-28") {
+                                    var fill_color = "gray"
+                                }
+                                else {
+                                    var fill_color = curr_obj.domain_color_map[domain];
+                                }
+                                //if (d3.select(this).attr("selected") === "false") {
+                                    d3.select(this)
+                                    .style("fill", fill_color);
+                                //}
                 }
-                else {
-                    var fill_color = curr_obj.domain_color_map[domain];
-                }
-                //if (d3.select(this).attr("selected") === "false") {
-                    d3.select(this)
-                    .style("fill", fill_color);
-                //}
-                
             })
            ;
 
@@ -167,7 +194,7 @@ function IndexBar(svg_elem, full_data) {
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + marginX + ","+(0 - margin + within_margin)+")")
+           .attr("transform", "translate(" + 2*marginX + ","+(0 - margin + within_margin)+")")
            .call(yAxis);
 
     }

@@ -10,9 +10,9 @@ function HeatMap(svg_elem, full_data){
 
     this.domain_color_map = {
         "Overall":"#17a2b8",
-        "Work":"#007bff",
+        "Work":"#017EDA",
         "Money":"#28a745",
-        "Knowledge":"red",
+        "Knowledge":"#B40E00",
         "Time":"#ffc107",
         "Power":"#e83e8c",
         "Health":"#6610f2"
@@ -23,9 +23,9 @@ function HeatMap(svg_elem, full_data){
     var margin = 0.12*this.height;
     var marginX = 0.1*this.width;
 
-    console.log(this.full_data["countries"])
+    //console.log(this.full_data["countries"])
     var num_countries = Object.keys(this.full_data["countries"]).length;
-    console.log(num_countries)
+    //console.log(num_countries)
 
     var xScale = d3.scaleBand()
                     .domain(d3.range(num_countries+1))
@@ -40,21 +40,6 @@ function HeatMap(svg_elem, full_data){
     
     var svg = d3.select(this.svg_elem);
 
-    this.get_sorted_records = function(overall_index) {
-        var records = [];
-        for (var country in overall_index) {
-            if (country != "min_index" && country != "max_index") {
-                records.push({"key":country, "value":overall_index[country]});
-            }
-        }
-
-        records.sort(function(first, second) {
-         return first.value - second.value;
-        });
-
-        return records;
-    }
-
     this.remove = function(){
        svg.selectAll("g.axis").remove();
          svg.selectAll("rect").remove();
@@ -65,6 +50,8 @@ function HeatMap(svg_elem, full_data){
     this.render_heat_map = function(domain, sub_domains, records) {
         
         var curr_obj = this;
+
+        //console.log(records);
 
         svg.selectAll("g.axis").remove();
         svg.selectAll("rect").remove();
@@ -78,34 +65,31 @@ function HeatMap(svg_elem, full_data){
       var cols = sub_domains;
 
 
-    var x = d3.scaleBand()
+      var x = d3.scaleBand()
           .range([ 0, width])
           .domain(cols)
           .padding(0.01);
 
-    var container = svg.append("g")
+      var container = svg.append("g")
                        .attr("class", "heatcontainer")
                        .style('transform', 'translate(15%, 15%)');
 
-    container.append("g")
+      container.append("g")
           .attr("class","axis")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x))
 
-    var y = d3.scaleBand()
+      var y = d3.scaleBand()
           .range([height, 0 ])
           .domain(rows)
           .padding(0.05);
 
     
     
-    container.append("g")
+      container.append("g")
           .attr("class","axis")
           .attr("transform","translate("+ width + ",0)")
           .call(d3.axisRight(y));
-
-    
-
 
 
       var myColor = d3.scaleLinear()
