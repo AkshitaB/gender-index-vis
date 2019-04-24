@@ -500,7 +500,7 @@ function change_vis2(filter_obj) {
 
 function change_vis1(filter_obj) {
 
-    $("#vis1").empty();
+    //$("#vis1").empty();
     var year = get_year();
 
     var domain = get_domain();
