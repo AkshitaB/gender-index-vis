@@ -122,6 +122,7 @@ function MapRender(svg_elem) {
         console.log(curr_obj.height)
 
         var map_x = curr_obj.width/10 -300;
+        var selected = null;
 
         //Load in GeoJSON data
         d3.json("static/europe.json", function(json) {
@@ -131,39 +132,74 @@ function MapRender(svg_elem) {
                .enter()
                .append("path")
                .attr("d", path)
-               .attr("data-toggle", "tooltip")
                .attr("data-html", "true")
-               .attr("transform", "translate("+(map_x)+", "+(curr_obj.height*1.3)+")")
+               .attr("data-toggle", function(d, j) {
+                  var country_id = json['features'][j]['id'];
+                  var country_name = json['features'][j]['properties']['name'];
+
+                  var country_index = Math.round(overall_index[country_id] * 100) / 100;
+
+                  $(this).tooltip({'title': '<b>Country:</b> ' + 
+                                            country_name + '<br><b>Percent: </b> ' + 
+                                            country_index + '%'
+                                  });
+                  return "tooltip";
+               })
+               
+               .attr("transform", "translate("+(map_x-50)+", "+(curr_obj.height*1.4)+")")
                .style("fill", function(d, j) {
                       var country_id = json['features'][j]['id'];
                       return curr_obj.get_index_color(overall_index, country_id);
                 })
                .on("mouseover", function(d, j) {
 
-                var country_id = json['features'][j]['id'];
-                var country_name = json['features'][j]['properties']['name'];
+                if(d3.select(this).attr("selected") != "true") {
+                
+                  d3.select(this)
+                  .style("fill","orange");
+                }
 
-                var country_index = Math.round(overall_index[country_id] * 100) / 100;
-
-                d3.select(this)
-                .style("fill","orange");
-
-                $(this).tooltip({'title': '<b>Country:</b> ' + 
-                                          country_name + '<br><b>GE Index:</b> ' + 
-                                          country_index
-                                });
+                $(this).tooltip();                
 
                })
                .on("mouseout", function(d, j) {
                  var country_id = json['features'][j]['id'];
 
                  var new_color = curr_obj.get_index_color(overall_index, country_id);
-                 d3.select(this)
-                 .style("fill", new_color);
+                 if(d3.select(this).attr("selected") != "true") {
+                   d3.select(this)
+                   .style("fill", new_color);
+                 }
+                 else {
+
+                 }
 
                })
-              .on("click", function() {
-                  console.log("Hello.");
+              .attr("selected", "false")
+              .on("click", function(d, i) {
+                if(d3.select(this).attr("selected") === "false"){
+                  var country_id = json['features'][i]['id'];
+                  if(selected) {
+                    selected.style("fill", curr_obj.get_index_color(overall_index, country_id))
+                              .attr("selected", "false")
+                  }
+                  selected = d3.select(this);
+                  d3.select(this).style("fill","black")
+                      .attr("selected","true");
+
+                  
+                  $("#chosen_country2").text(country_id);
+                  $("#chosen_country2").change();
+                }
+                else {
+                  var country_id = json['features'][i]['id'];
+                  var new_color = curr_obj.get_index_color(overall_index, country_id);
+                  d3.select(this).style("fill", new_color)
+                      .attr("selected","false");
+                    selected = null;
+                    $("#chosen_country2").text("");
+                    $("#chosen_country2").change();
+                }
                });
 
         });

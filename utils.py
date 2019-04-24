@@ -205,6 +205,7 @@ class DataReader:
         self.simple_data['indicators'] = self.indicators
         self.simple_data['indicator_column_map'] = self.indicator_column_map
         self.simple_data['violence'] = self.violence
+        self.simple_data['awareness'] = self.awareness
 
     def jsonify(self):
         self.construct_data()

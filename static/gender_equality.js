@@ -44,28 +44,21 @@ function FilterData(data) {
 
     this.read_violence_index = function() {
         var violence = this.data['violence'];
-        violence['min_index'] = 0
-        violence['max_index'] = 100
-        /*
-        var min_index = 100;
-        var max_index = 0;
-        var overall_index = {};
-        var index_obj;
-        for (var i=0; i<the_year.length; i++) {
-            index_obj = the_year[i][index_column];
-            index_obj = Math.round(index_obj * 100) / 100;
-            overall_index[the_year[i]['Country']] = index_obj;
-            if (min_index > index_obj) {
-                min_index = index_obj;
-            }
-            if (max_index < index_obj) {
-                max_index = index_obj;
+        violence['min_index'] = 19
+        violence['max_index'] = 52
+        return violence;
+    }
+
+    this.read_awareness_data = function(country) {
+        var awareness = this.data['awareness'];
+        console.log(awareness)
+        for (var idx in awareness) {
+            console.log(awareness[idx])
+            if (awareness[idx]['Country'] === country) {
+                var dataset = awareness[idx];
+                return dataset;
             }
         }
-        overall_index['min_index'] = min_index;
-        overall_index['max_index'] = max_index;
-        return overall_index;*/
-        return violence;
     }
 
     this.read_country_index_over_years = function(country, index_column) {
@@ -184,31 +177,6 @@ function FilterData(data) {
             }
         }
         return diverging_data;
-
-        /*
-
-        for (var i=0; i<rel_data.length; i++) {
-            // console.log(rel_data[i]['Country'])
-            if (rel_data[i]['Country'] == country) {
-
-                for(var j=0; j<num_questions; j++){
-                    tuple = {}
-                    str_w = "";
-                    str_m = "";
-                    //str_w = ques[j] + " (%) W"
-                    //str_m = ques[j] + " (%) M"
-                    str_w = rel_data[indicator_map[domain]]
-                    tuple['question'] = labels[j]
-                    tuple[1] = rel_data[i][str_m]
-                    tuple[2] = rel_data[i][str_w]
-                    power.push(tuple);
-                } break; 
-            }
-            
-         }   
-            
-        return power;
-        */
     }
     this.read_power_data = function(year, country) {
         // console.log(this.data);
@@ -380,6 +348,35 @@ function get_which_radio() {
     }
 }
 
+function change_vis7(filter_obj) { 
+
+    $("#vis7").empty();
+
+    var country_code = $("#chosen_country2").text();
+
+    if (country_code !== "") {
+        var awareness_data = filter_obj.read_awareness_data(country_code)
+
+        var pie_render = new PieChart("#vis7");
+        pie_render.render_pie(awareness_data)
+
+        $("#caption8").text('Awareness about violence against women in ' + filter_obj.data['countries'][country_code]);
+    }
+
+    else {
+        var country_code = "EU-28";
+        var awareness_data = filter_obj.read_awareness_data(country_code)
+
+        var pie_render = new PieChart("#vis7");
+        pie_render.render_pie(awareness_data)
+
+        $("#caption8").text('Awareness about violence against women in ' + filter_obj.data['countries'][country_code]);
+    }
+
+    
+
+}
+
 function change_vis5(filter_obj){
     $('#vis5').empty();
 
@@ -544,6 +541,12 @@ function add_country_selection_event(filter_obj) {
     });
 }
 
+function add_country_selection_event2(filter_obj) {
+    $("#chosen_country2").change(function() {
+        change_vis7(filter_obj);
+    });
+}
+
 function add_indicators(filter_obj) {
     var indicator_menus = ["#domain_drop_indicator1", "#domain_drop_indicator2"];
     for (var jdx in indicator_menus) {
@@ -606,7 +609,7 @@ function data_callback(data) {
     //var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
     //render_diverging_bar.render_diverging_bar(power_data);
 
-    console.log(filter_obj.read_violence_index())
+    
 
     change_vis3(filter_obj);
     change_vis2(filter_obj);
@@ -633,8 +636,18 @@ function data_callback(data) {
     //console.log(diverging_data)
     //render_diverging_bar.render_diverging_bar(diverging_data);
 
+    var violence_percent = filter_obj.read_violence_index();
     var map_render = new MapRender("#vis6");
-    map_render.render_map(overall_index);
+    map_render.render_map(violence_percent);
+
+    //var awareness_data = filter_obj.read_awareness_data("SE")
+
+    //var pie_render = new PieChart("#vis7");
+    //pie_render.render_pie("Sweden" , awareness_data)
+
+    add_country_selection_event2(filter_obj);
+
+    change_vis7(filter_obj);
 }
 
 
