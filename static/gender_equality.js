@@ -123,6 +123,61 @@ function FilterData(data) {
         return scatterplot_data;
     }
 
+    this.read_diverging_data = function(year, country, domain) {
+
+        var indicators = this.data['indicators'];
+        console.log(this.data['indicators'])
+        var indicator_map = this.data['indicator_column_map'];
+        var ques = this.data['indicators'][domain];
+
+        var diverging_data = [];
+        var rel_data = this.data['year_data'][year];
+
+        if (country == "") {
+            country = "EU-28";
+        }
+
+        for (var i=0; i<rel_data.length; i++) {
+            if (rel_data[i]['Country'] === country) {
+                for (var jdx in ques) {
+                    var tuple = {};
+                    var str_w = indicator_map[ques[jdx]][0];
+                    var str_m = indicator_map[ques[jdx]][1];
+                    tuple['question'] = ques[jdx];
+                    tuple[1] = rel_data[i][str_m];
+                    tuple[2] = rel_data[i][str_w];
+                    diverging_data.push(tuple);
+                }
+                break;
+            }
+        }
+        return diverging_data;
+
+        /*
+
+        for (var i=0; i<rel_data.length; i++) {
+            // console.log(rel_data[i]['Country'])
+            if (rel_data[i]['Country'] == country) {
+
+                for(var j=0; j<num_questions; j++){
+                    tuple = {}
+                    str_w = "";
+                    str_m = "";
+                    //str_w = ques[j] + " (%) W"
+                    //str_m = ques[j] + " (%) M"
+                    str_w = rel_data[indicator_map[domain]]
+                    tuple['question'] = labels[j]
+                    tuple[1] = rel_data[i][str_m]
+                    tuple[2] = rel_data[i][str_w]
+                    power.push(tuple);
+                } break; 
+            }
+            
+         }   
+            
+        return power;
+        */
+    }
     this.read_power_data = function(year, country) {
         // console.log(this.data);
         // console.log(this.data['power_data']);
@@ -258,6 +313,8 @@ function change_vis5(filter_obj){
 
 function change_vis4(filter_obj){
 
+    console.log("changing vis4")
+
     $("#vis4").empty();
     var year = get_year();
 
@@ -265,10 +322,16 @@ function change_vis4(filter_obj){
 
     var domain = get_domain();
 
+    //country_code = "SE";
+    //domain = "TIME";
+
+    var diverging_data = filter_obj.read_diverging_data(year, country_code, domain.toUpperCase());
+
     var power_data = filter_obj.read_power_data(year, country_code);
 
     var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
-    render_diverging_bar.render_diverging_bar(power_data);
+    //render_diverging_bar.render_diverging_bar(power_data, "Power");
+    render_diverging_bar.render_diverging_bar(diverging_data, domain);
 }
 
 function change_vis3(filter_obj){
@@ -383,6 +446,8 @@ function add_indicator_events(filter_obj) {
         var selText = $(this).text();
         console.log(selText);
         $("#dropdown_btn_indicator1").text(selText);
+
+        change_vis5(filter_obj);
     });
 
     $("#domain_drop_indicator2 a").click(function(e){
@@ -391,12 +456,6 @@ function add_indicator_events(filter_obj) {
         var selText = $(this).text();
         console.log(selText);
         $("#dropdown_btn_indicator2").text(selText);
-
-        /*var indicator1 = get_indicator1();
-        var indicator2 = get_indicator2();
-        var year = get_year();
-
-        var z = filter_obj.read_scatterplot_data(year, indicator1, indicator2);*/
         
         change_vis5(filter_obj);
 
@@ -414,10 +473,10 @@ function data_callback(data) {
     var render_bar = new IndexBar("#vis1", filter_obj.data);
     render_bar.render_bar("Overall", overall_index);
 
-    var power_data = filter_obj.read_power_data('2015', "");
+    //var power_data = filter_obj.read_power_data('2015', "");
 
-    var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
-    render_diverging_bar.render_diverging_bar(power_data);
+    //var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
+    //render_diverging_bar.render_diverging_bar(power_data);
 
     change_vis3(filter_obj);
     change_vis2(filter_obj);
@@ -434,6 +493,9 @@ function data_callback(data) {
 
     add_indicator_events(filter_obj);
 
+    //var diverging_data = filter_obj.read_diverging_data('2015', 'SE', 'TIME');
+    //console.log(diverging_data)
+    //render_diverging_bar.render_diverging_bar(diverging_data);
 }
 
 

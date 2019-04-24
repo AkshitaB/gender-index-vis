@@ -97,6 +97,8 @@ class DataReader:
             tmp = json.loads(tmp.to_json(orient='records'))
             self.power_data[year]= tmp
 
+
+
     def __all_indicator_columns(self):
         '''
         This only considers indicators that fall in the 0-100 range.
@@ -116,6 +118,14 @@ class DataReader:
                                                                                               'People participating in formal or non-formal education (%) M']
         indicator_column_map['Tertiary students in education, health and welfare, humanities and arts (%)'] = ['Tertiary students in education, health and welfare, humanities and arts (%) W',
                                                                                                                'Tertiary students in education, health and welfare, humanities and arts (%) M']
+        indicator_column_map['Caring for children, elderly, or people with disabilities, every day (%)'] = ['People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) W',\
+                                                                                                            'People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) M']
+
+        indicator_column_map['Daily cooking and/or household work (%)'] = ['People doing cooking and/or household, every day (%) W',
+                                                                           'People doing cooking and/or household, every day (%) M']
+
+        indicator_column_map['Weekly participation in sporting, cultural, leisure activities (%)'] = ['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W',\
+                                                                                                  'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
 
 
 
@@ -133,9 +143,67 @@ class DataReader:
                                    'People participating in formal or non-formal education (%)',
                                    'Tertiary students in education, health and welfare, humanities and arts (%)']
 
+        indicators['TIME'] = ['Caring for children, elderly, or people with disabilities, every day (%)',
+                              'Daily cooking and/or household work (%)',
+                              'Weekly participation in sporting, cultural, leisure activities (%)']       
+
 
         self.indicators = indicators
         self.indicator_column_map = indicator_column_map
+    """
+
+    def __all_indicator_columns(self):
+        '''
+        This only considers indicators that fall in the 0-100 range.
+        '''
+        indicator_column_map = {}
+        indicator_column_map['Employment rate'] = ['FTE employment rate (%) W', 'FTE employment rate (%) M']
+        indicator_column_map['Employed in education, human health and social work'] = ['Employed people in education, human health and social work activities (%) W', \
+                                                                                       'Employed people in education, human health and social work activities (%) M']
+        indicator_column_map['Ability to take time off'] = ['Ability to take one hour or two off during working hours to take care of personal or family matters (%) W', \
+                                                                                                                'Ability to take one hour or two off during working hours to take care of personal or family matters (%) M']
+        indicator_column_map['Career Prospects Index'] = ['Career Prospects Index (points, 0-100) W', \
+                                                                          'Career Prospects Index (points, 0-100) M']
+        indicator_column_map['Not at-risk-of-poverty'] = ['Not at-risk-of-poverty (%) W', 'Not at-risk-of-poverty (%) M']
+        indicator_column_map['Income distribution S20/S80'] = ['Income distribution S20/S80 (%) W', 'Income distribution S20/S80 (%) M']
+        indicator_column_map['Graduates of tertiary education)'] = ['Graduates of tertiary education (%) W', 'Graduates of tertiary education (%) M']
+        indicator_column_map['Formal or non-formal education (%)'] = ['People participating in formal or non-formal education (%) W', \
+                                                                                              'People participating in formal or non-formal education (%) M']
+        indicator_column_map['Tertiary students in education, health and welfare, humanities and arts'] = ['Tertiary students in education, health and welfare, humanities and arts (%) W',
+                                                                                                               'Tertiary students in education, health and welfare, humanities and arts (%) M']
+        indicator_column_map['Caring activities'] = ['People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) W',\
+                                                                                                            'People caring for and educating their children or grandchildren, elderly or people with disabilities, every day (%) M']
+
+        indicator_column_map['Cooking/household work'] = ['People doing cooking and/or household, every day (%) W',
+                                                                           'People doing cooking and/or household, every day (%) M']
+
+        indicator_column_map['Sports, Culture, Leisure'] = ['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W',\
+                                                                                                  'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
+
+
+
+
+        indicators = {}
+        indicators['WORK'] = ['Emploment Rate',
+                              'Employed in education, human health and social work',
+                              'Ability to take time off',
+                              'Career Prospects Index']
+
+        indicators['MONEY'] = ['Not at-risk-of-poverty',
+                               'Income distribution S20/S80']
+
+        indicators['KNOWLEDGE'] = ['Graduates of tertiary education',
+                                   'Formal or non-formal education',
+                                   'Tertiary students in education, health and welfare, humanities and arts']
+
+        indicators['TIME'] = ['Caring activities',
+                              'Cooking/household work',
+                              'Sports, Culture, Leisure']       
+
+
+        self.indicators = indicators
+        self.indicator_column_map = indicator_column_map
+    """
 
 
 
