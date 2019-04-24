@@ -43,7 +43,7 @@ function MapRender(svg_elem) {
     this.left = position['left'];
     this.top = position['top'];
 
-    this.scale_factor = 500;
+    this.scale_factor = 800;
 
     this.num_countries = 28;
 
@@ -121,7 +121,7 @@ function MapRender(svg_elem) {
         console.log(curr_obj.width)
         console.log(curr_obj.height)
 
-        var map_x = curr_obj.width/12;
+        var map_x = curr_obj.width/10 -300;
 
         //Load in GeoJSON data
         d3.json("static/europe.json", function(json) {
@@ -133,7 +133,7 @@ function MapRender(svg_elem) {
                .attr("d", path)
                .attr("data-toggle", "tooltip")
                .attr("data-html", "true")
-               .attr("transform", "translate("+(map_x)+", "+(curr_obj.height)+")")
+               .attr("transform", "translate("+(map_x)+", "+(curr_obj.height*1.3)+")")
                .style("fill", function(d, j) {
                       var country_id = json['features'][j]['id'];
                       return curr_obj.get_index_color(overall_index, country_id);
