@@ -280,6 +280,7 @@ function add_dropdown_event(filter_obj) {
         change_vis1(filter_obj);
         change_vis2(filter_obj);
         change_vis3(filter_obj);
+        change_vis4(filter_obj);
     });
 
 }
