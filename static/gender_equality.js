@@ -399,6 +399,16 @@ function change_vis4(filter_obj){
     var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
     //render_diverging_bar.render_diverging_bar(power_data, "Power");
     render_diverging_bar.render_diverging_bar(diverging_data, domain);
+
+    console.log(filter_obj.data)
+    var country_name = '';
+    if (country_code === "EU-28" || country_code === "") {
+        country_name = "EU-28";
+    }
+    else {
+        country_name = filter_obj.data['countries'][country_code];
+    }
+    $("#caption4").text(domain + ' Indicators for ' + country_name)
 }
 
 function change_vis3(filter_obj){

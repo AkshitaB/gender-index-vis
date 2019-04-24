@@ -17,7 +17,7 @@ function IndexBar(svg_elem, full_data) {
 
     //var margin = 0.1*this.height;
     var margin = 0.1*this.height;
-    var marginX = 0.01*this.width;
+    var marginX = 0.02*this.width;
 
     var within_margin = 0.01*this.height;
 
@@ -195,7 +195,7 @@ function IndexBar(svg_elem, full_data) {
 
         svg.append("g")
            .attr("class", "axis")
-           .attr("transform", "translate(" + 2*marginX + ","+(0 - margin + within_margin)+")")
+           .attr("transform", "translate(" + marginX + ","+(0 - margin + within_margin)+")")
            .call(yAxis);
 
     }
