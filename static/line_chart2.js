@@ -397,7 +397,7 @@ function LineChart2(svg_elem, full_data) {
                             //.attr("height", curr_obj.height)
                             .attr("transform", "translate("+"0"+", "+"0"+")");
 
-        var indiv_height = curr_obj.height/datasets.length;
+        var indiv_height = (curr_obj.height - margin)/datasets.length;
 
         for (var idx in datasets) {
 

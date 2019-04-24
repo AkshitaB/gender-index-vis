@@ -43,7 +43,7 @@ function MapRender(svg_elem) {
     this.left = position['left'];
     this.top = position['top'];
 
-    this.scale_factor = 700;
+    this.scale_factor = 500;
 
     this.num_countries = 28;
 
@@ -82,7 +82,7 @@ function MapRender(svg_elem) {
 
     this.get_index_color = function(overall_index, country_id) {
       var curr_obj = this;
-      var quantize = d3.scale.quantize()
+      var quantize = d3.scaleQuantize()
         .domain([0, 1.0])
         .range(d3.range(curr_obj.COLOR_COUNTS).map(function(i) { return i }));
 
@@ -103,12 +103,13 @@ function MapRender(svg_elem) {
         curr_obj.setup_colors();
 
         //Define map projection
-        var projection = d3.geo.azimuthalEquidistant()
-                               .translate([this.width/2, this.height/2])
+        var projection = d3.geoAzimuthalEquidistant()
+                               //.translate([this.width/2, this.height/2])
+                               //.transform("translate(0,0)")
                                .scale([this.scale_factor]);
 
         //Define path generator
-        var path = d3.geo.path()
+        var path = d3.geoPath()
                          .projection(projection);
 
         var svg = d3.select(svg_elem);
@@ -116,6 +117,11 @@ function MapRender(svg_elem) {
         console.log(overall_index)
         var dataset = d3.range(this.num_countries);
         console.log(dataset)
+
+        console.log(curr_obj.width)
+        console.log(curr_obj.height)
+
+        var map_x = curr_obj.width/12;
 
         //Load in GeoJSON data
         d3.json("static/europe.json", function(json) {
@@ -127,7 +133,7 @@ function MapRender(svg_elem) {
                .attr("d", path)
                .attr("data-toggle", "tooltip")
                .attr("data-html", "true")
-               .attr("transform", "translate("+(curr_obj.left-curr_obj.width/2)+", "+(curr_obj.top+curr_obj.height)+")")
+               .attr("transform", "translate("+(map_x)+", "+(curr_obj.height)+")")
                .style("fill", function(d, j) {
                       var country_id = json['features'][j]['id'];
                       return curr_obj.get_index_color(overall_index, country_id);
@@ -154,8 +160,6 @@ function MapRender(svg_elem) {
                  var new_color = curr_obj.get_index_color(overall_index, country_id);
                  d3.select(this)
                  .style("fill", new_color);
-
-                 //$(this).tooltip('hide')
 
                })
               .on("click", function() {

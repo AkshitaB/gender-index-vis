@@ -17,7 +17,7 @@ function IndexBar(svg_elem, full_data) {
 
     //var margin = 0.1*this.height;
     var margin = 0.1*this.height;
-    var marginX = 0.0*this.width;
+    var marginX = 0.01*this.width;
 
     var within_margin = 0.01*this.height;
 

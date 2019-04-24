@@ -149,8 +149,9 @@ function HeatMap(svg_elem, full_data){
           .attr("y", function(d) { return y(d.country) })
           .attr("width", x.bandwidth() )
           .attr("height", y.bandwidth() )
+          .attr("data-html", "true")
           .style("fill", function(d) { 
-            $(this).tooltip({'title':Math.round(d.value * 100) / 100});
+            $(this).tooltip({'title':'<b>'+curr_obj.full_data['countries'][d.country]+'</b>: '+ Math.round(d.value * 100) / 100});
 
             return myColor(d.value)} 
             )

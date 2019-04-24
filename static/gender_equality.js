@@ -281,8 +281,22 @@ function add_dropdown_event(filter_obj) {
         var selText = $(this).text();
         console.log(selText);
         $("#dropdown_btn").text(selText);
-        $("#caption").text(selText);
-        $("#caption2").text(selText);
+        if (selText === "Overall") {
+            var caption_text = 'Gender Equality Index';
+        }
+        else {
+            var caption_text = 'Gender Equality Index for the domain of ' + selText;
+        }
+        $("#caption").text(caption_text);
+
+        if (selText === "Overall") {
+            var caption3_text = 'Distribution Across Domains';
+        }
+        else {
+            var caption3_text = 'Distribution Across Sub-Domains'
+        }
+        $("#caption3").text(caption3_text);
+
         change_vis1(filter_obj);
         change_vis2(filter_obj);
         change_vis3(filter_obj);
@@ -470,7 +484,7 @@ function add_time_slider_event(filter_obj) {
         change_vis1(filter_obj);
         change_vis3(filter_obj);
         change_vis4(filter_obj);
-        change_vis5(filter_obj);
+        //change_vis5(filter_obj);
     });
 
     // Change input value on label click
@@ -556,7 +570,7 @@ function data_callback(data) {
     change_vis3(filter_obj);
     change_vis2(filter_obj);
 
-    change_vis5(filter_obj);
+    //change_vis5(filter_obj);
 
     add_dropdown_event(filter_obj);
 
@@ -564,9 +578,9 @@ function data_callback(data) {
 
     add_country_selection_event(filter_obj);
 
-    add_indicators(filter_obj);
+    //add_indicators(filter_obj);
 
-    add_indicator_events(filter_obj);
+    //add_indicator_events(filter_obj);
 
     add_radio_event(filter_obj);
 
@@ -575,6 +589,9 @@ function data_callback(data) {
     //var diverging_data = filter_obj.read_diverging_data('2015', 'SE', 'TIME');
     //console.log(diverging_data)
     //render_diverging_bar.render_diverging_bar(diverging_data);
+
+    //var map_render = new MapRender("#vis6");
+    //map_render.render_map(overall_index);
 }
 
 
