@@ -62,13 +62,13 @@ this.render_diverging_bar = function(power_data, domain) {
 
         container.append("g")
           .attr("class","axis")
-          .attr("transform", "translate(25, 0)")
+          .attr("transform", "translate(0, 0)")
           .call(d3.axisTop(x))
 
         container.append("g")
           .attr("class","axis")
           // .attr("transform", "translate(" + 20 + ",0)")
-          .attr("transform","translate(25,0)")
+          .attr("transform","translate(0,0)")
           .call(d3.axisLeft(y));
 
         var vakken = container.selectAll(".question")
@@ -90,12 +90,12 @@ this.render_diverging_bar = function(power_data, domain) {
         bars.append("text")
             .attr("x", function(d) { 
                 if(d.name == 'Men'){
-                    return x(d.x1-5);
+                    return x(d.x1-4);
                 }else{
-                    return x(d.x0+2); 
+                    return x(d.x0+1); 
                 }
             })
-            .attr("y", y.bandwidth()/2+9 )
+            .attr("y", y.bandwidth()/2+7 )
             .attr("dy", "0.5em")
             .attr("dx", "0.5em")
             .style("font" ,"10px sans-serif")
