@@ -127,7 +127,15 @@ class DataReader:
         indicator_column_map['Weekly participation in sporting, cultural, leisure activities (%)'] = ['Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) W',\
                                                                                                   'Workers doing sporting, cultural or leisure activities outside of their home, at least daily or several times a week (%) M']
 
-
+        indicator_column_map['Ministers (%)'] = ['Share of ministers (%) W', 'Share of ministers (%) M']
+        indicator_column_map['Members of parliament (%)'] = ['Share of members of parliament (%) W', 'Share of members of parliament (%) M']
+        indicator_column_map['Members of regional assemblies (%)'] = ['Share of members of regional assemblies (%) W', 'Share of members of regional assemblies (%) W']
+        indicator_column_map['Board members in companies (%)'] = ['Share of members of boards in largest quoted companies, supervisory board or board of directors (%) W',\
+                                                              'Share of members of boards in largest quoted companies, supervisory board or board of directors (%) M']
+        indicator_column_map['Board members of central bank (%)'] = ['Share of board members of central bank (%) W', 'Share of board members of central bank (%) M']
+        indicator_column_map['Board members of research funding organisations (%)'] = ['Share of board members of research funding organisations (%) W', 'Share of board members of research funding organisations (%) M']
+        indicator_column_map['Board members of broadcasting organisations (%)'] = ['Share of board members of publically owned broadcasting organisations (%)  W', 'Share of board members of publically owned broadcasting organisations (%)  M']
+        indicator_column_map['Decision makers in national Olympic sport organisations (%)'] = ['Share of members of highest decision making body of the national Olympic sport organisations (%)  W', 'Share of members of highest decision making body of the national Olympic sport organisations (%)  M']
 
 
         indicators = {}
@@ -145,7 +153,17 @@ class DataReader:
 
         indicators['TIME'] = ['Caring for children, elderly, or people with disabilities, every day (%)',
                               'Daily cooking and/or household work (%)',
-                              'Weekly participation in sporting, cultural, leisure activities (%)']       
+                              'Weekly participation in sporting, cultural, leisure activities (%)']
+
+        indicators['POWER'] = ['Ministers (%)', \
+                               'Members of parliament (%)', \
+                               'Members of regional assemblies (%)', \
+                               'Board members in companies (%)', \
+                               'Board members of central bank (%)', \
+                               'Board members of research funding organisations (%)', \
+                               'Board members of broadcasting organisations (%)',\
+                               'Decision makers in national Olympic sport organisations (%)'
+                               ]
 
 
         self.indicators = indicators
