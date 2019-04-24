@@ -102,6 +102,10 @@ function FilterData(data) {
         var indicator_map = this.data['indicator_column_map'];
         console.log(indicator_map)
         console.log(indicator1)
+        //indicator2 = this.data['indicators'][indicator1];
+
+        //indicator2 = 'TIME';
+
         for (var i=0; i<rel_data.length; i++) {
             var female_tuple = {};
             var male_tuple = {};
@@ -109,11 +113,13 @@ function FilterData(data) {
                 female_tuple['country'] = rel_data[i]['Country']
                 female_tuple[indicator1] = rel_data[i][indicator_map[indicator1][0]]
                 female_tuple[indicator2] = rel_data[i][indicator_map[indicator2][0]]
+                //female_tuple[indicator2] = rel_data[i][indicator2];
                 female_tuple['gender'] = 'Female';
 
                 male_tuple['country'] = rel_data[i]['Country']
                 male_tuple[indicator1] = rel_data[i][indicator_map[indicator1][1]]
                 male_tuple[indicator2] = rel_data[i][indicator_map[indicator2][1]]
+                //male_tuple[indicator2] = rel_data[i][indicator2];
                 male_tuple['gender'] = 'Male';
 
                 scatterplot_data.push(female_tuple)
@@ -280,8 +286,58 @@ function add_dropdown_event(filter_obj) {
         change_vis1(filter_obj);
         change_vis2(filter_obj);
         change_vis3(filter_obj);
+        change_vis4(filter_obj);
     });
 
+}
+
+function add_radio_event(filter_obj) {
+    $("#exampleRadios1").click(function(e) {
+        console.log("clicked1")
+        for (var idx in [1, 2, 3, 4, 5, 6, 7]) {
+            var c_num = idx;
+            $("#defaultCheck"+(c_num)).attr("disabled", "true");
+        }
+        change_vis2(filter_obj);
+    });
+
+    $("#exampleRadios2").click(function(e) {
+        for (var idx in [1, 2, 3, 4, 5, 6, 7]) {
+            var c_num = idx;
+            $("#defaultCheck"+(c_num)).removeAttr("disabled");
+        }
+        change_vis2(filter_obj);
+    });
+}
+
+function add_checkbox_event(filter_obj) {
+    for (var idx in [1, 2, 3, 4, 5, 6, 7]) {
+        var c_num = idx;
+        $("#defaultCheck"+(c_num)).click(function(e) {
+            change_vis2(filter_obj);
+        });
+    }
+}
+
+function get_selected_domains() {
+    var selected_domains = [];
+    for (var idx in [1, 2, 3, 4, 5, 6, 7]) {
+        var c_num = idx;
+        if ($("#defaultCheck"+(c_num)).is(":checked")) {
+            selected_domains.push($("#defaultCheck"+(c_num)).attr("value"))
+        }
+    }
+    return selected_domains;
+}
+
+function get_which_radio() {
+
+    if ($("#exampleRadios1").is(":checked")) {
+        return "#exampleRadios1";
+    }
+    else {
+        return "exampleRadios2";
+    }
 }
 
 function change_vis5(filter_obj){
@@ -298,9 +354,6 @@ function change_vis5(filter_obj){
 
     var indicator1 = get_indicator1();
     var indicator2 = get_indicator2();
-
-    console.log(indicator1)
-    console.log(indicator2)
 
     if (indicator1 !== "Select indicator" && indicator2 !== "Select Indicator") {
         var scatterplot_data = filter_obj.read_scatterplot_data(year, indicator1, indicator2);
@@ -358,18 +411,40 @@ function change_vis2(filter_obj) {
         var per_country = filter_obj.read_country_index_over_years("", domain.toUpperCase());
         var render_chart = new LineChart2("#vis2", filter_obj.data);
         render_chart.render_chart("", domain, per_country);
+
+        $("#caption2").text("EU-28's trends for "+domain+"");
     }
     else {
-        var domain = get_domain();
+        if (get_which_radio() === "#exampleRadios1") {
+            var domain = get_domain();
 
-        var per_country = filter_obj.read_country_index_over_years(country_code, domain.toUpperCase());
-        console.log(per_country);
+            var per_country = filter_obj.read_country_index_over_years(country_code, domain.toUpperCase());
+            console.log(per_country);
 
-        var country_name = filter_obj.data['countries'][country_code];
+            var country_name = filter_obj.data['countries'][country_code];
 
-        var render_chart = new LineChart2("#vis2", filter_obj.data);
-        render_chart.render_chart(country_name, domain, per_country);
+            var render_chart = new LineChart2("#vis2", filter_obj.data);
+            render_chart.render_chart(country_name, domain, per_country);
+
+            $("#caption2").text("Comparison of trends for " + country_name + "'s "+domain+" index with EU-28");
+        }
+        else {
+            var country_name = filter_obj.data['countries'][country_code];
+            var selected_domains = get_selected_domains();
+            var data_list = [];
+            for (var idx in selected_domains) {
+                var domain = selected_domains[idx];
+                var domain_data = filter_obj.read_country_index_over_years(country_code, domain.toUpperCase());
+                data_list.push(domain_data);
+            }
+            var render_chart = new LineChart2("#vis2", filter_obj.data);
+            render_chart.render_charts(country_name, selected_domains, data_list);
+
+            $("#caption2").text(country_name + "'s trends for selected domains");
+        }
     }
+
+    
 
 }
 
@@ -492,6 +567,10 @@ function data_callback(data) {
     add_indicators(filter_obj);
 
     add_indicator_events(filter_obj);
+
+    add_radio_event(filter_obj);
+
+    add_checkbox_event(filter_obj);
 
     //var diverging_data = filter_obj.read_diverging_data('2015', 'SE', 'TIME');
     //console.log(diverging_data)

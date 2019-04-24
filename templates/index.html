@@ -273,13 +273,66 @@
 
         </div>
         <div class="row vh-100">
-            <div class=" border mt-0 col-6 h-50">
+            <div class="border mt-0 col-6 h-50">
                     
                     <svg id="vis2" class="h-75 col-12 mt-4">
                     </svg>
                     <h6 id="caption2" class="text-center">Overall</h6>
             </div>
-            <input id="chosen_country" style="display:none;"></input>
+            <div class="mt-0 h-50 col-6 text-center">
+                <div class="col-sm text-left">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked="false">
+                  <label class="form-check-label" for="exampleRadios1">
+                    Compare domain with EU-28
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                  <label class="form-check-label" for="exampleRadios2">
+                    Compare all domains for country
+                  </label>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Work" id="defaultCheck1" disabled checked>
+                      <label class="form-check-label" for="defaultCheck1">
+                        Work
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Money" id="defaultCheck2" disabled checked>
+                      <label class="form-check-label" for="defaultCheck2">
+                        Money
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Knowledge" id="defaultCheck3" disabled checked>
+                      <label class="form-check-label" for="defaultCheck3">
+                        Knowledge
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Time" id="defaultCheck4" disabled checked>
+                      <label class="form-check-label" for="defaultCheck4">
+                        Time
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Power" id="defaultCheck5" disabled checked>
+                      <label class="form-check-label" for="defaultCheck5">
+                        Power
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Health" id="defaultCheck6" disabled checked>
+                      <label class="form-check-label" for="defaultCheck6">
+                        Health
+                      </label>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+            
         </div>
 
         <!--/div-->
@@ -318,5 +371,6 @@
 
         </div>
     </div>
+    <input id="chosen_country" style="display:none;"></input>
 </body>
 </html>

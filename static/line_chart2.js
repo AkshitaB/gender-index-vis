@@ -51,12 +51,14 @@ function LineChart2(svg_elem, full_data) {
             dataset_eu.push({"y":Math.round(data[idx]['eu_output'] * 100) / 100})
             if(country){
                 dataset_1.push({"y":Math.round(data[idx]['country_output'] * 100) / 100});
+                dataset_2.push({"y":Math.round((data[idx]['country_output'] - 10) * 100) / 100});
             }
             
             //dataset_2.push({"y":Math.round((data[idx]['country_output'] - 10) * 100) / 100})
         }
 
         //console.log(dataset_1)
+        var country_names = [country];
 
         var dataset_countries = [dataset_1];
 
@@ -127,7 +129,7 @@ function LineChart2(svg_elem, full_data) {
             svg.selectAll(".dotn" + idx)
                 .data(dataset)
                 .enter().append("circle") // Uses the enter().append() method
-                .attr("class", "dot") // Assign a class for styling
+                .attr("class", "dotn" + idx) // Assign a class for styling
                 .attr("cx", function(d, i) { return xScale(i) + marginX })
                 .attr("cy", function(d) { return curr_obj.height - (yScale(d.y)) + within_margin})
                 .attr("r", 5)
@@ -155,7 +157,9 @@ function LineChart2(svg_elem, full_data) {
                 .style("font-size", "16px")
                 .attr("x", curr_obj.width - xScale(1)/2)
                 .attr("y", curr_obj.height/2 + margin)
-                .text(country);
+                .text(function(d, i) {
+                    return country_names[idx];
+                });
         }
 
 
@@ -172,10 +176,11 @@ function LineChart2(svg_elem, full_data) {
         
         for (var idx in dataset_countries) {
 
-            svg.selectAll(".dot")
+            svg.selectAll(".dotn" + idx)
                 .attr("data-html", "true")
                 .attr("data-toggle", function(d, i) {
-                    $(this).tooltip({'title': '<b>'+country+' Index:</b> ' + 
+                    console.log(i)
+                    $(this).tooltip({'title': '<b>'+country_names[idx]+' Index:</b> ' + 
                                               d.y
                                     });
                     return "tooltip";
@@ -297,6 +302,150 @@ function LineChart2(svg_elem, full_data) {
 
                 focus2.style("display", "none");
             });
+
+    }
+
+    this.render_charts = function(country, domain_names, data_list) {
+
+        var curr_obj = this;
+        var width = curr_obj.width;
+        var height = curr_obj.height;
+
+
+        var datasets = [];
+        console.log(data_list)
+
+        for (var idx in data_list) {
+            datasets.push([]);
+            for (var jdx in data_list[idx]) {
+                if(country){
+                    
+                    datasets[idx].push({"y":Math.round(data_list[idx][jdx]['country_output'] * 100) / 100});
+                }
+            }
+        }
+
+        console.log(datasets)
+
+        // 7. d3's line generator
+        var line = d3.line()
+            .x(function(d, i) { return marginX + xScale(i); }) // set the x values for the line generator
+            .y(function(d) { return curr_obj.height - (yScale(d.y)) + within_margin; }) // set the y values for the line generator 
+            .curve(d3.curveMonotoneX) // apply smoothing to the line
+
+        // 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
+
+        var svg = d3.select(curr_obj.svg_elem);
+
+        // 3. Call the x axis in a group tag
+
+        var xAxis = d3.axisBottom().scale(xScale)
+                                   .tickValues(d3.range(num_years))
+                                   .tickFormat(function(d, i) {
+                                    return years[i];
+                                   });
+
+        var yAxis = d3.axisLeft().scale(yScale)
+                                 .ticks(10)
+                                 .tickFormat(function(d, i){
+                                    return (10 - i)*10;
+                                 });
+
+        svg.append("g")
+           .attr("class", "axis")
+           .attr("transform", "translate("+marginX+"," + (curr_obj.height - margin + within_margin) + ")")
+           .call(xAxis);
+
+        // 4. Call the y axis in a group tag
+        svg.append("g")
+           .attr("class", "axis")
+           .attr("transform", "translate(" + marginX + ","+(0 - margin + within_margin)+")")
+           .call(yAxis);
+
+        // 9. Append the path, bind the data, and call the line generator 
+        for (var idx in datasets) {
+
+            var dataset = datasets[idx];
+        
+            svg.append("path")
+                .datum(dataset) // 10. Binds data to the line 
+                .attr("class", "line") // Assign a class for styling 
+                .attr("d", line) // 11. Calls the line generator 
+                .style("stroke", curr_obj.domain_color_map[domain_names[idx]]);
+        }
+
+        var focus2 = svg.append("g").attr("class", "focus").style("display", "none");
+        focus2.append("line").attr("class", "focus line")
+                             .attr("x1", 0).attr("x2", 0)
+                             .attr("y1", 0).attr("y2", height - margin + within_margin).style("stroke", "black");
+
+        // 12. Appends a circle for each datapoint 
+        for (var idx in datasets) {
+            var dataset = datasets[idx];
+            svg.selectAll(".dotn" + idx)
+                .data(dataset)
+                .enter().append("circle") // Uses the enter().append() method
+                .attr("class", "dotn" + idx) // Assign a class for styling
+                .attr("cx", function(d, i) { return xScale(i) + marginX })
+                .attr("cy", function(d) { return curr_obj.height - (yScale(d.y)) + within_margin})
+                .attr("r", 5)
+                .style("fill", curr_obj.domain_color_map[domain_names[idx]]);
+        }
+
+        var legend_box = svg.append("g")
+                            .attr("class", "border")
+                            //.attr("height", curr_obj.height)
+                            .attr("transform", "translate("+"0"+", "+"0"+")");
+
+        var indiv_height = curr_obj.height/datasets.length;
+
+        for (var idx in datasets) {
+
+            legend_box.append("text")
+                .attr("class", "legend")    // style the legend
+                .style("fill", curr_obj.domain_color_map[domain_names[idx]])
+                .style("text-anchor", "middle")
+                .style("font-weight", "bold")
+                .style("font-size", "12px")
+                .attr("x", curr_obj.width - xScale(1/2))
+                //.attr("y", curr_obj.height/2 + margin)
+                .attr("y", function(d, i) {
+                    return idx*indiv_height + margin;
+                })
+                .text(function(d, i) {
+                    return domain_names[idx];
+                });
+        }
+
+        
+        for (var idx in datasets) {
+
+            console.log(idx)
+            console.log(domain_names)
+
+            svg.selectAll(".dotn" + idx)
+                .attr("data-html", "true")
+                .attr("data-toggle", function(d, i) {
+                    $(this).tooltip({'title': '<b>'+domain_names[idx]+' Index:</b> ' + 
+                                              d.y
+                                    });
+                    return "tooltip";
+                })
+                .on("mouseover", function(d, j) {
+
+                    d3.select(this)
+                    .style("fill", "orange");
+
+                    $(this).tooltip();
+
+                })
+                .on("mouseout", function(d, i) {
+                    console.log(domain_names[idx])
+                    d3.select(this)
+                    .style("fill", curr_obj.domain_color_map[domain_names[idx]]);
+                });
+
+        }
 
     }
 }
