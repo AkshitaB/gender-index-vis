@@ -42,6 +42,32 @@ function FilterData(data) {
         return overall_index;
     }
 
+    this.read_violence_index = function() {
+        var violence = this.data['violence'];
+        violence['min_index'] = 0
+        violence['max_index'] = 100
+        /*
+        var min_index = 100;
+        var max_index = 0;
+        var overall_index = {};
+        var index_obj;
+        for (var i=0; i<the_year.length; i++) {
+            index_obj = the_year[i][index_column];
+            index_obj = Math.round(index_obj * 100) / 100;
+            overall_index[the_year[i]['Country']] = index_obj;
+            if (min_index > index_obj) {
+                min_index = index_obj;
+            }
+            if (max_index < index_obj) {
+                max_index = index_obj;
+            }
+        }
+        overall_index['min_index'] = min_index;
+        overall_index['max_index'] = max_index;
+        return overall_index;*/
+        return violence;
+    }
+
     this.read_country_index_over_years = function(country, index_column) {
         var curr_obj = this;
         if (index_column == 'OVERALL') {
@@ -389,26 +415,29 @@ function change_vis4(filter_obj){
 
     var domain = get_domain();
 
-    //country_code = "SE";
-    //domain = "TIME";
+    if (domain !== "Overall") {
 
-    var diverging_data = filter_obj.read_diverging_data(year, country_code, domain.toUpperCase());
+        var diverging_data = filter_obj.read_diverging_data(year, country_code, domain.toUpperCase());
 
-    var power_data = filter_obj.read_power_data(year, country_code);
+        var power_data = filter_obj.read_power_data(year, country_code);
 
-    var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
-    //render_diverging_bar.render_diverging_bar(power_data, "Power");
-    render_diverging_bar.render_diverging_bar(diverging_data, domain);
+        var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
+        //render_diverging_bar.render_diverging_bar(power_data, "Power");
+        render_diverging_bar.render_diverging_bar(diverging_data, domain);
 
-    console.log(filter_obj.data)
-    var country_name = '';
-    if (country_code === "EU-28" || country_code === "") {
-        country_name = "EU-28";
+        console.log(filter_obj.data)
+        var country_name = '';
+        if (country_code === "EU-28" || country_code === "") {
+            country_name = "EU-28";
+        }
+        else {
+            country_name = filter_obj.data['countries'][country_code];
+        }
+        $("#caption4").text(domain + ' Indicators for ' + country_name)
     }
     else {
-        country_name = filter_obj.data['countries'][country_code];
+        $("#caption4").text('')
     }
-    $("#caption4").text(domain + ' Indicators for ' + country_name)
 }
 
 function change_vis3(filter_obj){
@@ -577,6 +606,8 @@ function data_callback(data) {
     //var render_diverging_bar = new DivergingBar("#vis4", filter_obj.data)
     //render_diverging_bar.render_diverging_bar(power_data);
 
+    console.log(filter_obj.read_violence_index())
+
     change_vis3(filter_obj);
     change_vis2(filter_obj);
 
@@ -595,6 +626,8 @@ function data_callback(data) {
     add_radio_event(filter_obj);
 
     add_checkbox_event(filter_obj);
+
+    
 
     //var diverging_data = filter_obj.read_diverging_data('2015', 'SE', 'TIME');
     //console.log(diverging_data)
