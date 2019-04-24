@@ -600,8 +600,8 @@ function data_callback(data) {
     //console.log(diverging_data)
     //render_diverging_bar.render_diverging_bar(diverging_data);
 
-    //var map_render = new MapRender("#vis6");
-    //map_render.render_map(overall_index);
+    var map_render = new MapRender("#vis6");
+    map_render.render_map(overall_index);
 }
 
 
