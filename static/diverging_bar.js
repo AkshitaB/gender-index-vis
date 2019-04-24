@@ -17,7 +17,7 @@ function DivergingBar(svg_elem, data) {
 
 
 
-    this.render_diverging_bar = function(power_data, domain) {
+this.render_diverging_bar = function(power_data, domain) {
 
         console.log(domain)
 
@@ -37,7 +37,7 @@ function DivergingBar(svg_elem, data) {
             .rangeRound([0, width]);
 
         var color = d3.scaleOrdinal()
-            .domain(["Women", "Men"])
+            .domain(["Men", "Women"])
             .range([myColor(30), myColor(75)]);
             //.range(["#92c6db", "#086fad"]);
 
@@ -49,9 +49,9 @@ function DivergingBar(svg_elem, data) {
 
         power_data.forEach(function(d) {
                 // calc percentages
-                d["Women"] = +d[1];
-                d["Men"] = +d[2];
-                var x0 = -1*(d["Women"]);
+                d["Women"] = +d[2];
+                d["Men"] = +d[1];
+                var x0 = -1*(d["Men"]);
                 var idx = 0;
                 d.boxes = color.domain().map(function(name) { return {name: name, x0: x0, x1: x0 += +d[name], n: +d[idx += 1]}; });
                 console.log(d);
@@ -62,12 +62,13 @@ function DivergingBar(svg_elem, data) {
 
         container.append("g")
           .attr("class","axis")
-          .attr("transform", "translate(0,0)")
+          .attr("transform", "translate(25, 0)")
           .call(d3.axisTop(x))
 
         container.append("g")
           .attr("class","axis")
-          .attr("transform","translate(0,0)")
+          // .attr("transform", "translate(" + 20 + ",0)")
+          .attr("transform","translate(25,0)")
           .call(d3.axisLeft(y));
 
         var vakken = container.selectAll(".question")
@@ -81,17 +82,17 @@ function DivergingBar(svg_elem, data) {
             .enter().append("g").attr("class", "subbar");
 
         bars.append("rect")
-            .attr("height", y.bandwidth()-20)
+            .attr("height", y.bandwidth()/2)
             .attr("x", function(d) { return x(d.x0); })
             .attr("width", function(d) { return x(d.x1) - x(d.x0); })
             .style("fill", function(d) { return color(d.name); });
 
         bars.append("text")
             .attr("x", function(d) { 
-                if(d.name == 'Women'){
-                    return x(d.x1-10);
+                if(d.name == 'Men'){
+                    return x(d.x1-5);
                 }else{
-                    return x(d.x0); 
+                    return x(d.x0+2); 
                 }
             })
             .attr("y", y.bandwidth()/2+9 )
@@ -110,7 +111,7 @@ function DivergingBar(svg_elem, data) {
 
         var startp = container.append("g").attr("class", "legendbox").attr("id", "mylegendbox");
         // this is not nice, we should calculate the bounding box and use that
-        var legend_tabs = [20, 80];
+        var legend_tabs = [width/10-30, width/10 +30];
         var legend = startp.selectAll(".legend")
             .data(color.domain().slice())
           .enter().append("g")
@@ -119,13 +120,14 @@ function DivergingBar(svg_elem, data) {
 
         legend.append("rect")
             .attr("x", 0)
-            .attr("width", 18)
-            .attr("height", 18)
+            .attr("y", 19)
+            .attr("width", 20)
+            .attr("height", 20)
             .style("fill", color);
 
         legend.append("text")
             .attr("x", 22)
-            .attr("y", 9)
+            .attr("y", 26)
             .attr("dy", ".35em")
             .style("text-anchor", "begin")
             .style("font" ,"10px sans-serif")
