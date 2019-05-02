@@ -8,8 +8,7 @@ function PieChart(svg_elem, data) {
     
     this.render_pie = function(awareness_data) {
 
-            console.log("render")
-            console.log(awareness_data)
+            
                 var w = this.width;
                 var h = this.height;
 
@@ -19,8 +18,7 @@ function PieChart(svg_elem, data) {
                 for (var lab in labels) {
                     dataset.push(awareness_data[labels[lab]]);
                 };
-                console.log("nn")
-                console.log(dataset)
+
 
                 var outerRadius = w / 4;
                 var innerRadius = w / 6;
@@ -49,7 +47,6 @@ function PieChart(svg_elem, data) {
                               .enter()
                               .append("g")
                               .attr("class", "arc")
-                              
                               .attr("transform", "translate(" + 2*outerRadius + "," + 2*outerRadius + ")");
                 
                 //Draw arc paths
@@ -68,18 +65,24 @@ function PieChart(svg_elem, data) {
                       .style('stroke-width', 2)
                       .style('stroke-linejoin','round')
                       .style('stroke', "black");
+  
                 
                 //Labels
                 arcs.append("text")
                     .attr("transform", function(d) {
-                        return "translate(" + arc.centroid(d) + ")";
+                        var _d = arc.centroid(d);
+                        _d[0] *= 1.35;  //multiply by a constant factor
+                        _d[1] *= 1.35;
+                        return "translate(" + _d + ")";
                     })
+                    .attr("font-size",'12px')
                     .attr("text-anchor", "middle")
                     .text(function(d) {
+                        if(d.value>0)
                         return d.value + "%";
                     });
 
-          totalValue = 10;
+          totalValue = 10; 
 
           arcs.append("text")
               .attr("text-anchor", "middle")
@@ -90,6 +93,36 @@ function PieChart(svg_elem, data) {
               .on("click",function() {
                           console.log("Hello.");
               });
+
+          var legendRectSize = 18;                                  
+          var legendSpacing = 4;
+          var width = this.width;
+          var height = this.height;
+
+          var legend = svg.selectAll('.legend')                     
+          .data(colors)                                   
+          .enter()                                                
+          .append('g')                                            
+          .attr('class', 'legendpie')                                
+          .attr('transform', function(d, i) {                     
+            var height = legendRectSize + legendSpacing;          
+            var offset =  height * colors.length / 2;     
+            var horz = 3*width/4;                       
+            var vert = i * height - offset;                       
+            return 'translate(' + horz + ',' + (h/5+vert) + ')';        
+          });   
+
+
+        legend.append('rect')                                     
+          .attr('width', legendRectSize)                          
+          .attr('height', legendRectSize)                         
+          .style('fill', d=>d)                        
+          .style('stroke', "black");                                
+          
+        legend.append('text')                                     
+          .attr('x', legendRectSize + legendSpacing)              
+          .attr('y', legendRectSize - legendSpacing)              
+          .text(function(d,i) { return labels[i]; });   
         }
 }
 

@@ -49,7 +49,7 @@ function MapRender(svg_elem) {
 
     this.config = {"color1":"#d3e5ff", "color2":"#08306B"};
 
-    this.COLOR_COUNTS = 9;
+    this.COLOR_COUNTS = 25;
 
     this.COLOR_FIRST = this.config.color1
     this.COLOR_LAST = this.config.color2;
@@ -82,16 +82,24 @@ function MapRender(svg_elem) {
 
     this.get_index_color = function(overall_index, country_id) {
       var curr_obj = this;
-      var quantize = d3.scaleQuantize()
-        .domain([0, 1.0])
-        .range(d3.range(curr_obj.COLOR_COUNTS).map(function(i) { return i }));
 
-      var range_diff = overall_index['max_index'] - overall_index['min_index'];
-      var scaled = (overall_index[country_id] - overall_index['min_index'])/range_diff;
-      var i = quantize(scaled);
-      var color = curr_obj.colors[i].getColors();
-      return "rgb(" + color.r + "," + color.g +
-          "," + color.b + ")";
+      var colorScale = d3.scaleQuantile()
+				.domain([overall_index['min_index'], curr_obj.COLOR_COUNTS, overall_index['max_index']])
+				.range(curr_obj.colors);
+
+	  curr_color =  colorScale(overall_index[country_id]);
+
+	  return "rgb(" + curr_color.getColors().r + "," + curr_color.getColors().g + "," + curr_color.getColors().b + ")";
+      // var quantize = d3.scaleQuantize()
+      //   .domain([0, 1.0])
+      //   .range(d3.range(curr_obj.COLOR_COUNTS).map(function(i) { return i }));
+
+      // var range_diff = overall_index['max_index'] - overall_index['min_index'];
+      // var scaled = (overall_index[country_id] - overall_index['min_index'])/range_diff;
+      // var i = quantize(scaled);
+      // var color = curr_obj.colors[i].getColors();
+      // return "rgb(" + color.r + "," + color.g +
+      //     "," + color.b + ")";
     }
 
 
@@ -101,6 +109,8 @@ function MapRender(svg_elem) {
         var curr_obj = this;
 
         curr_obj.setup_colors();
+
+
 
         //Define map projection
         var projection = d3.geoAzimuthalEquidistant()
@@ -202,8 +212,69 @@ function MapRender(svg_elem) {
                 }
                });
 
+              var margin = 0.12*curr_obj.height;
+    var marginX = 0.1*curr_obj.width;
+
+var width = curr_obj.width/1.5, height = curr_obj.height-margin;
+              var defs = svg.append("defs");
+      var linearGradientMap = defs.append("linearGradient")
+          .attr("id","linear-gradient-map");
+
+      linearGradientMap
+          .attr("x1","0%")
+          .attr("y1","100%")
+          .attr("x2","0%")
+          .attr("y2","0%");
+
+       console.log()
+       console.log("rgb(" + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().r + "," + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().g + "," + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().b + ")")
+
+      linearGradientMap.append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", "rgb(" + curr_obj.colors[0].getColors().r + "," + curr_obj.colors[0].getColors().g + "," + curr_obj.colors[0].getColors().b + ")")
+      //Set the color for the end (100%)
+      linearGradientMap.append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color","rgb(" + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().r + "," + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().g + "," + curr_obj.colors[curr_obj.COLOR_COUNTS-1].getColors().b + ")")
+
+      var legendsvgMap = svg.append("g")
+          .attr("class", "legendWrapperMap");
+
+      var legendWidth = 0.05*width, legendHeight = height/2;
+
+      legendsvgMap.append("rect")
+          .attr("width", legendWidth)
+          .attr("height", legendHeight)
+          .attr("x", width+2*marginX)
+          .attr("y", height-1.2*legendHeight-height/4)
+          .style("fill", "url(#linear-gradient-map)")
+          .style("stroke","gray")
+          .style("stroke-width","0.4px")
+          .style("filter", "url(#drop_shadow1)") 
+
+
+      //Set scale for x-axis
+      var yScaleLegend = d3.scaleLinear()
+          .range([legendHeight,0])
+          .domain([overall_index['min_index'], overall_index['max_index']]);
+          //.domain([d3.min(pt.legendSOM.colorData)/100, d3.max(pt.legendSOM.colorData)/100]);
+
+      //Define x-axis
+      var yAxisLegend = d3.axisRight()
+            //Set rough # of ticks
+          //.tickFormat(d3.format("%"))
+          .scale(yScaleLegend);   
+
+      //Set up X axis
+      legendsvgMap.append("g")
+          .attr("class", "axis")  //Assign "axis" class
+          .attr("transform", "translate(" + (width+2*marginX+legendWidth) + "," + (height-1.2*legendHeight-height/4) + ")")
+          .call(yAxisLegend);
+
+
         });
 
+        
         svg.selectAll("path")
 
 

@@ -14,7 +14,7 @@ function LineChart2(svg_elem, full_data) {
     };
 
     var margin = 0.1*this.height;
-    var marginX = 0.03*this.width;
+    var marginX = 0.04*this.width;
 
     var within_margin = 0.02*this.height;
 
